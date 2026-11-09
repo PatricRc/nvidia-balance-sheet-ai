@@ -4,7 +4,7 @@ A Microsoft Fabric + Power BI portfolio project: SEC EDGAR companyfacts land onc
 
 **Guiding question:** *How has NVIDIA's financial position changed?*
 
-> **Status: Day 1 scaffold.** Repo layout, README, and placeholders only. No bronze ingest, silver/gold tables, semantic model, report pages, Claude batch job, or chatbot have been built yet. No live report link, screenshots, or NVIDIA figures are claimed here.
+> **Status: Bronze/silver/gold ingest notebook ready.** Import `fabric/notebooks/nb_bronze_silver_gold_sec_edgar.ipynb` into Fabric, attach `NVIDIALakehouse`, Run all. Semantic model, report pages, Claude batch, and chatbot are not built yet.
 
 ## The story in four pages
 
@@ -24,19 +24,16 @@ SEC EDGAR  data.sec.gov
    declared User-Agent required; no CORS)
         │
         ▼
-nb_bronze_sec_edgar  (Fabric notebook)
-        │  raw JSON landed once → Files/bronze/sec/...
-        │  ingest metadata (accession, filed, retrieved_at)
+nb_bronze_silver_gold_sec_edgar  (Fabric notebook)
+        │  raw JSON landed once → Files/bronze/sec_edgar/…
         ▼
 silver.financial_fact
-  one row per concept + unit + period + form
-  + accession + filed date
+  one row per taxonomy/concept/unit/observation
         │
         ▼
-gold.balance_sheet_period
-  fiscal-period aware; latest-filed version rule
-  (keeps original accession); deterministic ratios
-  in code / DAX
+gold.balance_sheet + gold.income_statement + gold.cash_flow
+  + gold.dim_filing + gold.dim_line_item
+  primary-period + latest-filed rules; identity check
         │
         ├──► Direct Lake semantic model ──► Power BI report (4 pages)
         │
@@ -58,7 +55,7 @@ These are non-negotiable before any report page or AI note ships:
 
 1. **Fiscal vs calendar.** NVIDIA’s fiscal year ends late January / early February. Labels use fiscal periods from the filing; calendar-year shortcuts are forbidden in gold and on the canvas.
 2. **Instant vs duration.** Balance-sheet concepts are *instant* (point-in-time). Income / cash-flow concepts are *duration*. Do not mix them in the same fact grain without an explicit period type.
-3. **10-Q YTD → quarter.** Quarterly duration values are derived from year-to-date 10-Q figures (Q2 = YTD₂ − YTD₁, etc.). Document the derivation in silver / gold metadata.
+3. **10-Q YTD.** Duration facts on 10-Q with long windows are flagged `is_ytd` and kept raw. Standalone quarter derivation (Q2 = YTD₂ − YTD₁, Q4 = FY − 9M) is out of scope for v1 unless exact and lineage-tagged.
 4. **Restatements.** Keep every filed version. Gold’s “latest-filed” rule selects the current series for charts and **retains the original accession** so restatement flags and citations stay honest.
 5. **companyfacts ≠ the full filing.** EDGAR companyfacts is a structured extract, not the complete 10-K/10-Q narrative or every note disclosure. Say so on the report and in AI prompts.
 6. **No double counting.** Gross debt, current portion of long-term debt, and lease liabilities are modelled as separate concepts. Net-cash definitions are documented on page 3 and computed once in gold / DAX — never ad-hoc in a visual.
@@ -111,10 +108,9 @@ Microsoft Fabric (Lakehouse, Notebooks, OneLake, Direct Lake) · Delta Lake · P
 
 | Stage | Item | Status |
 |---|---|---|
-| Day 1 | README, folder scaffold, `.gitignore`, `.env.example` | **Done (this commit)** |
-| Next | `nb_bronze_sec_edgar` — pull submissions + companyfacts, land once under `Files/bronze/sec/` | Not started |
-| | Silver `financial_fact` flatten (concept × unit × period × form × accession × filed) | Not started |
-| | Gold `balance_sheet_period` + deterministic ratios; hand-check vs a filed 10-K | Not started |
+| Day 1 | README, folder scaffold, `.gitignore`, `.env.example` | **Done** |
+| Ingest | `nb_bronze_silver_gold_sec_edgar.ipynb` — bronze SEC JSON + `silver.financial_fact` + `gold.balance_sheet` / `income_statement` / `cash_flow` | **Done (notebook in repo; run in Fabric)** |
+| Next | Hand-check gold vs filed 10-K HTML; Direct Lake semantic model + pages 1–3 | Not started |
 | | Direct Lake semantic model + pages 1–3 | Not started |
 | | Claude batch notebook → `gold.ai_insight` + page 4 | Not started |
 | | Phase 2 HTML/FastAPI chatbot linked from the report | Not started |
