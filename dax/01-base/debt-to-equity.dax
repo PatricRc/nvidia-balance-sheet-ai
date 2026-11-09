@@ -1,0 +1,9 @@
+// Debt to Equity
+// Table: _Measures
+// Display folder: 01-base
+// Format: 0.00
+// Hidden: false
+// [Long-Term Debt] (LongTermDebtNoncurrent only) / [Total Equity]. Not total debt.
+
+Debt to Equity =
+DIVIDE([Long-Term Debt], [Total Equity])

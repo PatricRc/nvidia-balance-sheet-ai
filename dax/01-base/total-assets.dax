@@ -1,0 +1,20 @@
+// Total Assets
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Point-in-time us-gaap Assets at the latest period_end in the current filter context (is_latest_filing only). Do not SUM across periods.
+
+Total Assets =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "Assets",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)

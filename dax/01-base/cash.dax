@@ -1,0 +1,20 @@
+// Cash
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Point-in-time CashAndCashEquivalentsAtCarryingValue; latest period_end; is_latest_filing only.
+
+Cash =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "CashAndCashEquivalentsAtCarryingValue",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)

@@ -34,6 +34,7 @@ Source accession `0001045810-26-000021`, filed `2026-02-25`, period end `2026-01
 ## Known gaps
 
 - `PaymentsOfDividendsCommonStock` is absent from NVIDIA companyfacts; gold uses `PaymentsOfDividends`.
+- `PaymentsToAcquirePropertyPlantAndEquipment` (CapEx) last appears in NVIDIA companyfacts around mid-FY2020; later periods (including FY2026) have no CapEx row, so Free Cash Flow is BLANK.
 - Recent annual revenue is tagged `Revenues`; older years may also have `RevenueFromContractWithCustomerExcludingAssessedTax` — both stay on `gold.dim_line_item`.
 
 
@@ -48,7 +49,7 @@ Built by `nb_gold_dim_date.ipynb` as a **physical Delta table** (required for Di
 3. Q1–Q3 = **13 weeks** each from FY start; Q4 = remainder (13 or 14 weeks).
 4. Known checks: FY2026 → `2026-01-25`; Q2 FY2027 → `2026-07-26`.
 
-**Join key:** `date` (DateType) / `date_key` (yyyymmdd). Gold fact `period_end` casts to `date`.
+**Join key:** `date` (DateType) / `date_key` (yyyymmdd). Fact `period_end` is joined to `Date[date]` in the Direct Lake model; if Delta inferred `period_end` as a string, `nb_semantic_model.ipynb` aligns the model column to DateTime (it does not rewrite gold).
 
 **Coverage:** Jan 1 of the earliest gold `period_end` year through the end of the NVIDIA fiscal year that contains (~today + 2 years). Overwrite rebuild.
 

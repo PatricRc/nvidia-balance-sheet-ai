@@ -1,0 +1,12 @@
+// Free Cash Flow
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Operating Cash Flow minus CapEx (PaymentsToAcquirePropertyPlantAndEquipment). Returns BLANK when CapEx is missing (NVIDIA companyfacts drops this concept after mid-FY2020).
+
+Free Cash Flow =
+VAR _ocf = [Operating Cash Flow]
+VAR _capex = [CapEx]
+RETURN
+IF(ISBLANK(_capex), BLANK(), _ocf - _capex)

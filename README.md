@@ -4,7 +4,7 @@ A Microsoft Fabric + Power BI portfolio project: SEC EDGAR companyfacts land onc
 
 **Guiding question:** *How has NVIDIA's financial position changed?*
 
-> **Status: Bronze/silver/gold ingest notebook ready.** Import `fabric/notebooks/nb_bronze_silver_gold_sec_edgar.ipynb` into Fabric, attach `NVIDIALakehouse`, Run all. Semantic model, report pages, Claude batch, and chatbot are not built yet.
+> **Status: Gold tables + calendar + Direct Lake model notebook ready.** After gold and `gold.dim_date` exist, import `fabric/notebooks/nb_semantic_model.ipynb`, attach `NVIDIALakehouse`, set the kernel to **Python**, Run all → model **NVIDIA Financials**. Report pages, Publish to web, Claude batch, and chatbot are not built yet.
 
 ## The story in four pages
 
@@ -35,7 +35,7 @@ gold.balance_sheet + gold.income_statement + gold.cash_flow
   + gold.dim_filing + gold.dim_line_item
   primary-period + latest-filed rules; identity check
         │
-        ├──► Direct Lake semantic model ──► Power BI report (4 pages)
+        ├──► Direct Lake model **NVIDIA Financials** (`nb_semantic_model.ipynb`) ──► Power BI report (4 pages)
         │
         └──► Claude Messages API  (batch, server-side)
                 key in Azure Key Vault only
@@ -110,8 +110,9 @@ Microsoft Fabric (Lakehouse, Notebooks, OneLake, Direct Lake) · Delta Lake · P
 |---|---|---|
 | Day 1 | README, folder scaffold, `.gitignore`, `.env.example` | **Done** |
 | Ingest | `nb_bronze_silver_gold_sec_edgar.ipynb` — bronze SEC JSON + `silver.financial_fact` + `gold.balance_sheet` / `income_statement` / `cash_flow` | **Done (notebook in repo; run in Fabric)** |
-| Next | Hand-check gold vs filed 10-K HTML; Direct Lake semantic model + pages 1–3 | Not started |
-| | Direct Lake semantic model + pages 1–3 | Not started |
+| Calendar | `nb_gold_dim_date.ipynb` — `gold.dim_date` | **Done (run in Fabric)** |
+| Model | `nb_semantic_model.ipynb` — Direct Lake **NVIDIA Financials**, relationships, 01-base measures | **Notebook in repo; run in Fabric (Python kernel)** |
+| Next | First report page + Publish to web | Not started |
 | | Claude batch notebook → `gold.ai_insight` + page 4 | Not started |
 | | Phase 2 HTML/FastAPI chatbot linked from the report | Not started |
 | Later | Save as PBIP and commit TMDL + report JSON | Not started |
@@ -121,7 +122,7 @@ Microsoft Fabric (Lakehouse, Notebooks, OneLake, Direct Lake) · Delta Lake · P
 
 1. Set `SEC_USER_AGENT` (and pull Claude credentials from Key Vault — never commit them).
 2. Run bronze → silver → gold notebooks in the Fabric workspace / lakehouse named in `.env.example`.
-3. Connect the Direct Lake model; load `dax/_all-measures.dax` via DAX query view.
+3. Run `nb_semantic_model.ipynb` (Python kernel, lakehouse attached) to create **NVIDIA Financials**, or load `dax/_all-measures.dax` via DAX query view.
 4. Apply `powerbi/` theme when generated.
 5. Only after gold is hand-checked against the filing: run the Claude batch job and review `ai_insight` rows before publishing page 4.
 

@@ -1,9 +1,291 @@
 // _all-measures.dax
-// Day 1 placeholder. Paste real measures here after gold.balance_sheet_period
-// and gold.ai_insight exist, then load via Power BI Desktop → DAX query view
-// → Run → Update model with changes (same workflow as trading-analytics-fabric).
-//
-// Planned display folders:
-//   01-base, 02-page1-snapshot, 03-page2-liquidity, 04-page3-debt,
-//   05-page4-ai-notes, 06-html-cards, 07-svg-visuals,
-//   08-page1-layout … 11-page4-layout, 12-alt-text
+// NVIDIA Financials — base measures (01-base).
+// Load in Power BI Desktop / Fabric model view, or apply via nb_semantic_model.ipynb.
+// Tables: 'Balance Sheet', 'Income Statement', 'Cash Flow', 'Date', 'Line Item', 'Filing', '_Measures'.
+// Host table for all measures below: _Measures.
+
+// Total Assets
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Point-in-time us-gaap Assets at the latest period_end in the current filter context (is_latest_filing only). Do not SUM across periods.
+
+Total Assets =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "Assets",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// Total Liabilities
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Point-in-time us-gaap Liabilities; latest period_end; is_latest_filing only.
+
+Total Liabilities =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "Liabilities",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// Total Equity
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Point-in-time us-gaap StockholdersEquity; latest period_end; is_latest_filing only.
+
+Total Equity =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "StockholdersEquity",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// Cash
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Point-in-time CashAndCashEquivalentsAtCarryingValue; latest period_end; is_latest_filing only.
+
+Cash =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "CashAndCashEquivalentsAtCarryingValue",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// Long-Term Debt
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Point-in-time LongTermDebtNoncurrent only (not total debt; current portion and leases are separate concepts and are not included).
+
+Long-Term Debt =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "LongTermDebtNoncurrent",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// Revenue
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Duration revenue for the single latest period_end in context (is_latest_filing). Prefers RevenueFromContractWithCustomerExcludingAssessedTax when present, else Revenues. Not a sum of quarters. 10-Q values may be YTD when [Cash Flow Is YTD] / income is_ytd is true; FY 10-K is the annual total.
+
+Revenue =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _contract =
+    CALCULATE(
+        SUM('Income Statement'[value_usd]),
+        'Income Statement'[concept] = "RevenueFromContractWithCustomerExcludingAssessedTax",
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _legacy =
+    CALCULATE(
+        SUM('Income Statement'[value_usd]),
+        'Income Statement'[concept] = "Revenues",
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+RETURN
+COALESCE(_contract, _legacy)
+
+// Net Income
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Duration NetIncomeLoss for the single latest period_end in context; is_latest_filing only. Not a sum of quarters.
+
+Net Income =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "NetIncomeLoss",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)
+
+// Operating Cash Flow
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// NetCashProvidedByUsedInOperatingActivities for the single latest period_end (is_latest_filing). 10-Q figures with duration_days > 100 are year-to-date (see [Cash Flow Is YTD]); they are kept raw — quarters are not derived.
+
+Operating Cash Flow =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "NetCashProvidedByUsedInOperatingActivities",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)
+
+// CapEx
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: true
+// Hidden helper: PaymentsToAcquirePropertyPlantAndEquipment at the latest period_end. NVIDIA companyfacts last carries this concept through mid-FY2020; later periods are blank.
+
+CapEx =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "PaymentsToAcquirePropertyPlantAndEquipment",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)
+
+// Free Cash Flow
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Operating Cash Flow minus CapEx (PaymentsToAcquirePropertyPlantAndEquipment). Returns BLANK when CapEx is missing (NVIDIA companyfacts drops this concept after mid-FY2020).
+
+Free Cash Flow =
+VAR _ocf = [Operating Cash Flow]
+VAR _capex = [CapEx]
+RETURN
+IF(ISBLANK(_capex), BLANK(), _ocf - _capex)
+
+// Revenue YoY %
+// Table: _Measures
+// Display folder: 01-base
+// Format: 0.0%
+// Hidden: false
+// Revenue versus the same NVIDIA fiscal quarter in the prior fiscal year (matched on Date[fiscal_year]/[fiscal_quarter] quarter-end), not SAMEPERIODLASTYEAR.
+
+Revenue YoY % =
+VAR _curr = [Revenue]
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)
+
+// Net Income Margin %
+// Table: _Measures
+// Display folder: 01-base
+// Format: 0.0%
+// Hidden: false
+// [Net Income] / [Revenue] for the same latest period_end in context.
+
+Net Income Margin % =
+DIVIDE([Net Income], [Revenue])
+
+// Debt to Equity
+// Table: _Measures
+// Display folder: 01-base
+// Format: 0.00
+// Hidden: false
+// [Long-Term Debt] (LongTermDebtNoncurrent only) / [Total Equity]. Not total debt.
+
+Debt to Equity =
+DIVIDE([Long-Term Debt], [Total Equity])
+
+// Cash Flow Is YTD
+// Table: _Measures
+// Display folder: 01-base
+// Format: 0
+// Hidden: false
+// 1 when the cash-flow row at the latest period_end in context is flagged is_ytd (10-Q with duration_days > 100). Operating Cash Flow and Free Cash Flow are raw YTD in that case.
+
+Cash Flow Is YTD =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    MAX('Cash Flow'[is_ytd]),
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)

@@ -1,0 +1,20 @@
+// Net Income
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Duration NetIncomeLoss for the single latest period_end in context; is_latest_filing only. Not a sum of quarters.
+
+Net Income =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "NetIncomeLoss",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)

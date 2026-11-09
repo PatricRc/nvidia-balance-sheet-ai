@@ -1,0 +1,29 @@
+// Revenue
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Duration revenue for the single latest period_end in context (is_latest_filing). Prefers RevenueFromContractWithCustomerExcludingAssessedTax when present, else Revenues. Not a sum of quarters. 10-Q values may be YTD when [Cash Flow Is YTD] / income is_ytd is true; FY 10-K is the annual total.
+
+Revenue =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _contract =
+    CALCULATE(
+        SUM('Income Statement'[value_usd]),
+        'Income Statement'[concept] = "RevenueFromContractWithCustomerExcludingAssessedTax",
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _legacy =
+    CALCULATE(
+        SUM('Income Statement'[value_usd]),
+        'Income Statement'[concept] = "Revenues",
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+RETURN
+COALESCE(_contract, _legacy)

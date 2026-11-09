@@ -1,0 +1,20 @@
+// Long-Term Debt
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// Point-in-time LongTermDebtNoncurrent only (not total debt; current portion and leases are separate concepts and are not included).
+
+Long-Term Debt =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "LongTermDebtNoncurrent",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)

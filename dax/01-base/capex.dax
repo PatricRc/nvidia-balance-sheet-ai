@@ -1,0 +1,20 @@
+// CapEx
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: true
+// Hidden helper: PaymentsToAcquirePropertyPlantAndEquipment at the latest period_end. NVIDIA companyfacts last carries this concept through mid-FY2020; later periods are blank.
+
+CapEx =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "PaymentsToAcquirePropertyPlantAndEquipment",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)

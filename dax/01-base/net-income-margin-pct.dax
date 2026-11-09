@@ -1,0 +1,9 @@
+// Net Income Margin %
+// Table: _Measures
+// Display folder: 01-base
+// Format: 0.0%
+// Hidden: false
+// [Net Income] / [Revenue] for the same latest period_end in context.
+
+Net Income Margin % =
+DIVIDE([Net Income], [Revenue])

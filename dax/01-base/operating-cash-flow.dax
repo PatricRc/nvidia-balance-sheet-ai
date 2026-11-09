@@ -1,0 +1,20 @@
+// Operating Cash Flow
+// Table: _Measures
+// Display folder: 01-base
+// Format: #,##0
+// Hidden: false
+// NetCashProvidedByUsedInOperatingActivities for the single latest period_end (is_latest_filing). 10-Q figures with duration_days > 100 are year-to-date (see [Cash Flow Is YTD]); they are kept raw — quarters are not derived.
+
+Operating Cash Flow =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "NetCashProvidedByUsedInOperatingActivities",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)
