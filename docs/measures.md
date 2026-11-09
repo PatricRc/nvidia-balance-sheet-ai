@@ -6,7 +6,7 @@ All period-based measures use the **single latest `period_end` in filter context
 
 ## Average vs ending balances
 
-`[Average Assets]`, `[Average Equity]`, `[Average Inventory]`, and `[Average Receivables]` are **(current period-end + prior fiscal-quarter-end) / 2**. The prior quarter wraps Q1 → Q4 of the prior fiscal year. If the prior balance is missing, the measure **falls back to the ending balance**.
+`[Average Assets]`, `[Average Equity]`, `[Average Inventory]`, and `[Average Receivables]` are **(ending + prior-period-end) / 2**. At **fiscal-year grain** the prior period is the prior FY end; at **fiscal-quarter grain** it is the prior fiscal-quarter end (Q1 wraps → Q4 of the prior FY). If the prior balance is missing, the measure **falls back to the ending balance**.
 
 `[ROE]`, `[ROA]`, `[Asset Turnover]`, and `[Equity Multiplier]` all use those averages, so DuPont tiles:
 

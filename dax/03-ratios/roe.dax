@@ -3,7 +3,7 @@
 // Display folder: 03-ratios
 // Format: 0.0%
 // Hidden: false
-// Net Income / Average Equity. Average is (ending + prior fiscal-quarter-end) / 2, or ending if prior is missing. Not annualized in a quarterly context.
+// Net Income / Average Equity. Average is (ending + prior-period-end) / 2, prior FY end at year grain, or ending if prior is missing. Not annualized in a quarterly context.
 
 ROE =
 DIVIDE([Net Income], [Average Equity])

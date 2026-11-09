@@ -610,7 +610,7 @@ CALCULATE(
 // Display folder: 03-ratios
 // Format: #,##0
 // Hidden: false
-// Average of current and prior fiscal-quarter-end Total Assets (prior quarter wraps Q1 → prior FY Q4). If the prior balance is missing, uses ending Total Assets.
+// Average of ending and prior-period-end (prior FY end at year grain, prior fiscal quarter end at quarter grain) Total Assets (prior quarter wraps Q1 → prior FY Q4). If the prior balance is missing, uses ending Total Assets.
 
 Average Assets =
 VAR _end =
@@ -623,8 +623,10 @@ VAR _fy =
     CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
 VAR _fq =
     CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
-VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
-VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _annual =
+    DATEDIFF(MIN('Date'[date]), MAX('Date'[date]), DAY) > 120
+VAR _prior_fy = IF(_annual || _fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_annual || _fq = 1, 4, _fq - 1)
 VAR _prior_end =
     CALCULATE(
         MAX('Date'[date]),
@@ -647,7 +649,7 @@ IF(ISBLANK(_prior), _curr, DIVIDE(_curr + _prior, 2))
 // Display folder: 03-ratios
 // Format: #,##0
 // Hidden: false
-// Average of current and prior fiscal-quarter-end Total Equity (Q1 wraps to prior FY Q4). If the prior balance is missing, uses ending Total Equity.
+// Average of ending and prior-period-end (prior FY end at year grain, prior fiscal quarter end at quarter grain) Total Equity (Q1 wraps to prior FY Q4). If the prior balance is missing, uses ending Total Equity.
 
 Average Equity =
 VAR _end =
@@ -660,8 +662,10 @@ VAR _fy =
     CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
 VAR _fq =
     CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
-VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
-VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _annual =
+    DATEDIFF(MIN('Date'[date]), MAX('Date'[date]), DAY) > 120
+VAR _prior_fy = IF(_annual || _fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_annual || _fq = 1, 4, _fq - 1)
 VAR _prior_end =
     CALCULATE(
         MAX('Date'[date]),
@@ -684,7 +688,7 @@ IF(ISBLANK(_prior), _curr, DIVIDE(_curr + _prior, 2))
 // Display folder: 03-ratios
 // Format: #,##0
 // Hidden: false
-// Average of current and prior fiscal-quarter-end Inventory. Falls back to ending Inventory if the prior period is missing.
+// Average of ending and prior-period-end (prior FY end at year grain, prior fiscal quarter end at quarter grain) Inventory. Falls back to ending Inventory if the prior period is missing.
 
 Average Inventory =
 VAR _end =
@@ -697,8 +701,10 @@ VAR _fy =
     CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
 VAR _fq =
     CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
-VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
-VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _annual =
+    DATEDIFF(MIN('Date'[date]), MAX('Date'[date]), DAY) > 120
+VAR _prior_fy = IF(_annual || _fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_annual || _fq = 1, 4, _fq - 1)
 VAR _prior_end =
     CALCULATE(
         MAX('Date'[date]),
@@ -721,7 +727,7 @@ IF(ISBLANK(_prior), _curr, DIVIDE(_curr + _prior, 2))
 // Display folder: 03-ratios
 // Format: #,##0
 // Hidden: false
-// Average of current and prior fiscal-quarter-end Accounts Receivable. Falls back to ending AR if the prior period is missing.
+// Average of ending and prior-period-end (prior FY end at year grain, prior fiscal quarter end at quarter grain) Accounts Receivable. Falls back to ending AR if the prior period is missing.
 
 Average Receivables =
 VAR _end =
@@ -734,8 +740,10 @@ VAR _fy =
     CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
 VAR _fq =
     CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
-VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
-VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _annual =
+    DATEDIFF(MIN('Date'[date]), MAX('Date'[date]), DAY) > 120
+VAR _prior_fy = IF(_annual || _fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_annual || _fq = 1, 4, _fq - 1)
 VAR _prior_end =
     CALCULATE(
         MAX('Date'[date]),
@@ -820,7 +828,7 @@ DIVIDE([R&D Expense], [Revenue])
 // Display folder: 03-ratios
 // Format: 0.0%
 // Hidden: false
-// Net Income / Average Equity. Average is (ending + prior fiscal-quarter-end) / 2, or ending if prior is missing. Not annualized in a quarterly context.
+// Net Income / Average Equity. Average is (ending + prior-period-end) / 2, prior FY end at year grain, or ending if prior is missing. Not annualized in a quarterly context.
 
 ROE =
 DIVIDE([Net Income], [Average Equity])
@@ -830,7 +838,7 @@ DIVIDE([Net Income], [Average Equity])
 // Display folder: 03-ratios
 // Format: 0.0%
 // Hidden: false
-// Net Income / Average Assets. Average is (ending + prior fiscal-quarter-end) / 2, or ending if prior is missing. Not annualized in a quarterly context.
+// Net Income / Average Assets. Average is (ending + prior-period-end) / 2, prior FY end at year grain, or ending if prior is missing. Not annualized in a quarterly context.
 
 ROA =
 DIVIDE([Net Income], [Average Assets])

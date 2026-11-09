@@ -3,7 +3,7 @@
 // Display folder: 03-ratios
 // Format: #,##0
 // Hidden: false
-// Average of current and prior fiscal-quarter-end Accounts Receivable. Falls back to ending AR if the prior period is missing.
+// Average of ending and prior-period-end (prior FY end at year grain, prior fiscal quarter end at quarter grain) Accounts Receivable. Falls back to ending AR if the prior period is missing.
 
 Average Receivables =
 VAR _end =
@@ -16,8 +16,10 @@ VAR _fy =
     CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
 VAR _fq =
     CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
-VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
-VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _annual =
+    DATEDIFF(MIN('Date'[date]), MAX('Date'[date]), DAY) > 120
+VAR _prior_fy = IF(_annual || _fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_annual || _fq = 1, 4, _fq - 1)
 VAR _prior_end =
     CALCULATE(
         MAX('Date'[date]),
