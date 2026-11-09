@@ -1,11 +1,11 @@
 // _all-measures.dax
 // NVIDIA Financials — base measures (01-base).
 // Load in Power BI Desktop / Fabric model view, or apply via nb_semantic_model.ipynb.
-// Tables: 'Balance Sheet', 'Income Statement', 'Cash Flow', 'Date', 'Line Item', 'Filing', '_Measures'.
-// Host table for all measures below: _Measures.
+// Tables: 'Balance Sheet', 'Income Statement', 'Cash Flow', 'Date', 'Line Item', 'Filing'.
+// Host table for all measures below: Balance Sheet (display folder 01-base).
 
 // Total Assets
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
@@ -26,7 +26,7 @@ CALCULATE(
 )
 
 // Total Liabilities
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
@@ -47,7 +47,7 @@ CALCULATE(
 )
 
 // Total Equity
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
@@ -68,7 +68,7 @@ CALCULATE(
 )
 
 // Cash
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
@@ -89,7 +89,7 @@ CALCULATE(
 )
 
 // Long-Term Debt
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
@@ -110,7 +110,7 @@ CALCULATE(
 )
 
 // Revenue
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
@@ -140,7 +140,7 @@ RETURN
 COALESCE(_contract, _legacy)
 
 // Net Income
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
@@ -161,7 +161,7 @@ CALCULATE(
 )
 
 // Operating Cash Flow
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
@@ -182,7 +182,7 @@ CALCULATE(
 )
 
 // CapEx
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: true
@@ -203,7 +203,7 @@ CALCULATE(
 )
 
 // Free Cash Flow
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
@@ -216,7 +216,7 @@ RETURN
 IF(ISBLANK(_capex), BLANK(), _ocf - _capex)
 
 // Revenue YoY %
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: 0.0%
 // Hidden: false
@@ -251,7 +251,7 @@ RETURN
 DIVIDE(_curr - _prior, _prior)
 
 // Net Income Margin %
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: 0.0%
 // Hidden: false
@@ -261,7 +261,7 @@ Net Income Margin % =
 DIVIDE([Net Income], [Revenue])
 
 // Debt to Equity
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: 0.00
 // Hidden: false
@@ -271,7 +271,7 @@ Debt to Equity =
 DIVIDE([Long-Term Debt], [Total Equity])
 
 // Cash Flow Is YTD
-// Table: _Measures
+// Table: Balance Sheet
 // Display folder: 01-base
 // Format: 0
 // Hidden: false

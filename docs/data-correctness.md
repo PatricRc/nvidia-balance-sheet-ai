@@ -49,7 +49,7 @@ Built by `nb_gold_dim_date.ipynb` as a **physical Delta table** (required for Di
 3. Q1–Q3 = **13 weeks** each from FY start; Q4 = remainder (13 or 14 weeks).
 4. Known checks: FY2026 → `2026-01-25`; Q2 FY2027 → `2026-07-26`.
 
-**Join key:** `date` (DateType) / `date_key` (yyyymmdd). Fact `period_end` is joined to `Date[date]` in the Direct Lake model; if Delta inferred `period_end` as a string, `nb_semantic_model.ipynb` aligns the model column to DateTime (it does not rewrite gold).
+**Join key:** `date` (DateType) / `date_key` (yyyymmdd). Fact `period_end` (and other date-ish gold/silver columns) are written as Delta **Date** via `to_date` in `nb_bronze_silver_gold_sec_edgar`, then joined to `Date[date]`.
 
 **Coverage:** Jan 1 of the earliest gold `period_end` year through the end of the NVIDIA fiscal year that contains (~today + 2 years). Overwrite rebuild.
 

@@ -1,6 +1,6 @@
 # dax/
 
-DAX measures for the Direct Lake semantic model **NVIDIA Financials** — one `.dax` file each with a commented header, grouped by page (same framework as `trading-analytics-fabric`). Applied in Fabric by `fabric/notebooks/nb_semantic_model.ipynb`.
+DAX measures for the Direct Lake semantic model **NVIDIA Financials** — one `.dax` file each with a commented header, grouped by page (same framework as `trading-analytics-fabric`). Applied in Fabric by `fabric/notebooks/nb_semantic_model.ipynb`. Measures are hosted on the **Balance Sheet** table (display folder `01-base`), not on a calculated measure table.
 
 | Folder | Purpose |
 |---|---|

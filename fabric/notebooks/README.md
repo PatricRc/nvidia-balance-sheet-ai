@@ -17,9 +17,9 @@ Fabric notebook sources for `NVIDIA-BalanceSheet-AI` / lakehouse `NVIDIALakehous
 1. In workspace **NVIDIA-BalanceSheet-AI**, open or import `nb_bronze_silver_gold_sec_edgar.ipynb`.
 2. Attach default lakehouse **NVIDIALakehouse** (schema-enabled).
 3. Confirm parameter cell: `SEC_USER_AGENT = "DataPat.ai patricrc10@gmail.com"`.
-4. Run all. Tables written with `saveAsTable` into schemas `silver` and `gold`.
-5. Import/open **`nb_gold_dim_date.ipynb`**, attach the same lakehouse, Run all → `gold.dim_date`.
-6. Import/open **`nb_semantic_model.ipynb`**, attach the same lakehouse, set kernel to **Python** (not PySpark), Run all → semantic model `NVIDIA Financials`. Requires XMLA read/write on the capacity.
+4. Run all. Tables written with `saveAsTable` into schemas `silver` and `gold`. Date columns (`period_end`, `start`/`end`, `filed`, `filingDate`/`reportDate`, `ingest_date`) are stored as Date.
+5. Import/open **`nb_gold_dim_date.ipynb`**, attach the same lakehouse, Run all → `gold.dim_date` (re-run after a gold type change so the period_end checks still pass).
+6. Import/open **`nb_semantic_model.ipynb`**, attach the same lakehouse, set kernel to **Python** (not PySpark), Run all → semantic model `NVIDIA Financials`. Requires XMLA read/write on the capacity. Run this only after gold date types are in place.
 
 ## Tables produced
 

@@ -122,7 +122,7 @@ Microsoft Fabric (Lakehouse, Notebooks, OneLake, Direct Lake) · Delta Lake · P
 
 1. Set `SEC_USER_AGENT` (and pull Claude credentials from Key Vault — never commit them).
 2. Run bronze → silver → gold notebooks in the Fabric workspace / lakehouse named in `.env.example`.
-3. Run `nb_semantic_model.ipynb` (Python kernel, lakehouse attached) to create **NVIDIA Financials**, or load `dax/_all-measures.dax` via DAX query view.
+3. Re-run gold (`nb_bronze_silver_gold_sec_edgar`) so date columns are Delta Date, then `nb_gold_dim_date` (checks still apply), then `nb_semantic_model.ipynb` (Python kernel, lakehouse attached) to create **NVIDIA Financials**.
 4. Apply `powerbi/` theme when generated.
 5. Only after gold is hand-checked against the filing: run the Claude batch job and review `ai_insight` rows before publishing page 4.
 

@@ -28,9 +28,8 @@ Friendly model names; source columns keep gold snake_case so DAX stays aligned w
 | `Date` | `gold.dim_date` | Contiguous calendar + NVIDIA fiscal calendar. Marked as the date table on `date`. |
 | `Line Item` | `gold.dim_line_item` | Curated us-gaap concept map (unique `concept`) |
 | `Filing` | `gold.dim_filing` | One row per accession (`accn`) |
-| `_Measures` | Calculated table `ROW("Placeholder", 1)` (Import, hidden dummy column) | Measure home for 01-base |
 
-Storage mode: Direct Lake on OneLake (`use_sql_endpoint=False`). `_Measures` is the only Import table.
+Storage mode: Direct Lake on OneLake (`use_sql_endpoint=False`). All tables are Direct Lake; measures live on `Balance Sheet` (display folder `01-base`). No calculated tables.
 
 ## Relationships
 
@@ -61,11 +60,11 @@ erDiagram
 | `Income Statement[accn]` | `Filing[accn]` |
 | `Cash Flow[accn]` | `Filing[accn]` |
 
-Join types: `Date[date]` is DateType / DateTime. Gold fact `period_end` may have been inferred as a string when written from pandas. The notebook aligns it with `tom.set_data_type(..., "DateTime")` before creating the relationship; it does **not** rewrite gold Delta tables.
+Join types: `Date[date]` and fact `period_end` are Delta **Date** columns (cast with `to_date` in `nb_bronze_silver_gold_sec_edgar` before `saveAsTable`). The semantic-model notebook does not change column types; if they do not match, it exits and asks you to rerun the gold notebook.
 
 ## Measures (01-base)
 
-Hosted on `_Measures`. Point-in-time and duration measures all use the **single latest `period_end` in the current filter context** with `is_latest_filing = TRUE`. They never `SUM` across fiscal quarters (a fiscal-year date slicer includes Q1–Q3 and FY ends; summing would double-count).
+Hosted on **Balance Sheet** (display folder `01-base`). Point-in-time and duration measures all use the **single latest `period_end` in the current filter context** with `is_latest_filing = TRUE`. They never `SUM` across fiscal quarters (a fiscal-year date slicer includes Q1–Q3 and FY ends; summing would double-count).
 
 | Measure | Concept(s) | Notes |
 |---|---|---|
