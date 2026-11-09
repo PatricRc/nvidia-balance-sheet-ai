@@ -1,0 +1,11 @@
+.DS_Store
+._*
+__pycache__/
+*.pyc
+.env
+.env.*
+*.env
+secrets*
+*.pbix
+*.pbit
+node_modules/

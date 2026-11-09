@@ -1,0 +1,6 @@
+/* tokens.css — Day 1 placeholder.
+   Will be generated from scripts/ once the design token dict exists,
+   matching the trading-analytics-fabric pattern (one source → CSS + theme + DAX). */
+:root {
+  /* TBD: colour, type scale, radius, 8px spacing */
+}

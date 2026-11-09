@@ -1,0 +1,9 @@
+// _all-measures.dax
+// Day 1 placeholder. Paste real measures here after gold.balance_sheet_period
+// and gold.ai_insight exist, then load via Power BI Desktop → DAX query view
+// → Run → Update model with changes (same workflow as trading-analytics-fabric).
+//
+// Planned display folders:
+//   01-base, 02-page1-snapshot, 03-page2-liquidity, 04-page3-debt,
+//   05-page4-ai-notes, 06-html-cards, 07-svg-visuals,
+//   08-page1-layout … 11-page4-layout, 12-alt-text
