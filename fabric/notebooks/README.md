@@ -5,6 +5,7 @@ Fabric notebook sources for `NVIDIA-BalanceSheet-AI` / lakehouse `NVIDIALakehous
 | Notebook | Role | Status |
 |---|---|---|
 | **`nb_bronze_silver_gold_sec_edgar.ipynb`** | End-to-end: SEC pull → bronze JSON → `silver.financial_fact` → `gold.balance_sheet` / `income_statement` / `cash_flow` + dims | **Implemented** — import into Fabric, attach `NVIDIALakehouse`, Run all |
+| **`nb_gold_dim_date.ipynb`** | Contiguous `gold.dim_date` (calendar + NVIDIA fiscal calendar) for Direct Lake | **Implemented** — run after gold statements exist |
 | `nb_bronze_sec_edgar.py` | Stub pointer (logic lives in the .ipynb) | Pointer |
 | `nb_silver_financial_fact.py` | Stub pointer | Pointer |
 | `nb_gold_balance_sheet.py` | Stub pointer | Pointer |
@@ -16,6 +17,7 @@ Fabric notebook sources for `NVIDIA-BalanceSheet-AI` / lakehouse `NVIDIALakehous
 2. Attach default lakehouse **NVIDIALakehouse** (schema-enabled).
 3. Confirm parameter cell: `SEC_USER_AGENT = "DataPat.ai patricrc10@gmail.com"`.
 4. Run all. Tables written with `saveAsTable` into schemas `silver` and `gold`.
+5. Import/open **`nb_gold_dim_date.ipynb`**, attach the same lakehouse, Run all → `gold.dim_date`.
 
 ## Tables produced
 

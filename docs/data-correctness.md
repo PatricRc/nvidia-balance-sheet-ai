@@ -35,3 +35,21 @@ Source accession `0001045810-26-000021`, filed `2026-02-25`, period end `2026-01
 
 - `PaymentsOfDividendsCommonStock` is absent from NVIDIA companyfacts; gold uses `PaymentsOfDividends`.
 - Recent annual revenue is tagged `Revenues`; older years may also have `RevenueFromContractWithCustomerExcludingAssessedTax` — both stay on `gold.dim_line_item`.
+
+
+## `gold.dim_date` (calendar + NVIDIA fiscal)
+
+Built by `nb_gold_dim_date.ipynb` as a **physical Delta table** (required for Direct Lake — do not replace with a DAX calculated date table).
+
+**Fiscal rule** (validated 24/24 vs SEC submissions `reportDate` for 10-K/10-Q, FY2021–Q2 FY2027):
+
+1. Fiscal year ends on the **last Sunday of January**.
+2. Fiscal year number = calendar year of that January end (`FY2026` ended `2026-01-25`).
+3. Q1–Q3 = **13 weeks** each from FY start; Q4 = remainder (13 or 14 weeks).
+4. Known checks: FY2026 → `2026-01-25`; Q2 FY2027 → `2026-07-26`.
+
+**Join key:** `date` (DateType) / `date_key` (yyyymmdd). Gold fact `period_end` casts to `date`.
+
+**Coverage:** Jan 1 of the earliest gold `period_end` year through the end of the NVIDIA fiscal year that contains (~today + 2 years). Overwrite rebuild.
+
+**Assert:** every primary (`is_period_primary`) `period_end` in the three gold statement tables has `is_fiscal_quarter_end = true`. Relative “is_today / offset” flags are omitted on purpose — they go stale under Direct Lake; put those in DAX if needed.
