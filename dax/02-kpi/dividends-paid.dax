@@ -1,0 +1,20 @@
+// Dividends Paid
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Duration PaymentsOfDividends at the latest period_end (is_latest_filing). Uses PaymentsOfDividends (PaymentsOfDividendsCommonStock is absent from NVIDIA companyfacts). 10-Q may be YTD.
+
+Dividends Paid =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "PaymentsOfDividends",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)

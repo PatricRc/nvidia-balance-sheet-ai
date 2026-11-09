@@ -1,0 +1,29 @@
+// Cost of Revenue
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Prefers CostOfRevenue, else CostOfGoodsAndServicesSold, at the latest period_end (is_latest_filing).
+
+Cost of Revenue =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _primary =
+    CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "CostOfRevenue",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)
+VAR _fallback =
+    CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "CostOfGoodsAndServicesSold",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)
+RETURN
+COALESCE(_primary, _fallback)

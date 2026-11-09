@@ -289,3 +289,1742 @@ CALCULATE(
     'Cash Flow'[is_latest_filing] = TRUE(),
     'Cash Flow'[period_end] = _end
 )
+
+// ----- 02-kpi / 03-ratios / 04-analysis (nb_measures_financial) -----
+
+// Gross Profit
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Duration GrossProfit at the latest period_end (is_latest_filing). Not a sum of quarters.
+
+Gross Profit =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "GrossProfit",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)
+
+// Operating Income
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Duration OperatingIncomeLoss at the latest period_end (is_latest_filing).
+
+Operating Income =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "OperatingIncomeLoss",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)
+
+// Cost of Revenue
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Prefers CostOfRevenue, else CostOfGoodsAndServicesSold, at the latest period_end (is_latest_filing).
+
+Cost of Revenue =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _primary =
+    CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "CostOfRevenue",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)
+VAR _fallback =
+    CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "CostOfGoodsAndServicesSold",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)
+RETURN
+COALESCE(_primary, _fallback)
+
+// Current Assets
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Point-in-time AssetsCurrent at the latest period_end (is_latest_filing).
+
+Current Assets =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "AssetsCurrent",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// Current Liabilities
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Point-in-time LiabilitiesCurrent at the latest period_end (is_latest_filing).
+
+Current Liabilities =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "LiabilitiesCurrent",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// Working Capital
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Current Assets minus Current Liabilities (both point-in-time, latest period).
+
+Working Capital =
+[Current Assets] - [Current Liabilities]
+
+// Inventory
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Point-in-time InventoryNet at the latest period_end (is_latest_filing).
+
+Inventory =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "InventoryNet",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// Accounts Receivable
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Point-in-time AccountsReceivableNetCurrent at the latest period_end (is_latest_filing).
+
+Accounts Receivable =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "AccountsReceivableNetCurrent",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// Marketable Securities
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Point-in-time MarketableSecuritiesCurrent at the latest period_end. May be blank in some years (e.g. FY2026 companyfacts).
+
+Marketable Securities =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "MarketableSecuritiesCurrent",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)
+
+// R&D Expense
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Duration ResearchAndDevelopmentExpense at the latest period_end (is_latest_filing).
+
+R&D Expense =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "ResearchAndDevelopmentExpense",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)
+
+// EPS Diluted
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: 0.00
+// Hidden: false
+// Duration EarningsPerShareDiluted (USD/shares) at the latest period_end (is_latest_filing).
+
+EPS Diluted =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "EarningsPerShareDiluted",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)
+
+// Share Repurchases
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Duration PaymentsForRepurchaseOfCommonStock at the latest period_end (is_latest_filing). 10-Q may be YTD; see [Cash Flow Is YTD].
+
+Share Repurchases =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "PaymentsForRepurchaseOfCommonStock",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)
+
+// Dividends Paid
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Duration PaymentsOfDividends at the latest period_end (is_latest_filing). Uses PaymentsOfDividends (PaymentsOfDividendsCommonStock is absent from NVIDIA companyfacts). 10-Q may be YTD.
+
+Dividends Paid =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "PaymentsOfDividends",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)
+
+// Cash from Investing
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Duration NetCashProvidedByUsedInInvestingActivities at the latest period_end (is_latest_filing). 10-Q may be YTD.
+
+Cash from Investing =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "NetCashProvidedByUsedInInvestingActivities",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)
+
+// Cash from Financing
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Duration NetCashProvidedByUsedInFinancingActivities at the latest period_end (is_latest_filing). 10-Q may be YTD.
+
+Cash from Financing =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "NetCashProvidedByUsedInFinancingActivities",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)
+
+// Average Assets
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0
+// Hidden: false
+// Average of current and prior fiscal-quarter-end Total Assets (prior quarter wraps Q1 → prior FY Q4). If the prior balance is missing, uses ending Total Assets.
+
+Average Assets =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Assets]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Assets],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+IF(ISBLANK(_prior), _curr, DIVIDE(_curr + _prior, 2))
+
+// Average Equity
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0
+// Hidden: false
+// Average of current and prior fiscal-quarter-end Total Equity (Q1 wraps to prior FY Q4). If the prior balance is missing, uses ending Total Equity.
+
+Average Equity =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Equity]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Equity],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+IF(ISBLANK(_prior), _curr, DIVIDE(_curr + _prior, 2))
+
+// Average Inventory
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0
+// Hidden: false
+// Average of current and prior fiscal-quarter-end Inventory. Falls back to ending Inventory if the prior period is missing.
+
+Average Inventory =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Inventory]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Inventory],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+IF(ISBLANK(_prior), _curr, DIVIDE(_curr + _prior, 2))
+
+// Average Receivables
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0
+// Hidden: false
+// Average of current and prior fiscal-quarter-end Accounts Receivable. Falls back to ending AR if the prior period is missing.
+
+Average Receivables =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Accounts Receivable]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Accounts Receivable],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+IF(ISBLANK(_prior), _curr, DIVIDE(_curr + _prior, 2))
+
+// Period Days
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0.0
+// Hidden: true
+// Duration_days of the latest income-statement period (is_latest_filing); 365 if blank. Used as the day count for DIO/DSO (NVIDIA FY is typically 363, not 365).
+
+Period Days =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _days =
+    CALCULATE(
+        MAX('Income Statement'[duration_days]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+RETURN
+COALESCE(_days, 365)
+
+// Gross Margin %
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.0%
+// Hidden: false
+// Gross Profit / Revenue for the latest period in context.
+
+Gross Margin % =
+DIVIDE([Gross Profit], [Revenue])
+
+// Operating Margin %
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.0%
+// Hidden: false
+// Operating Income / Revenue for the latest period in context.
+
+Operating Margin % =
+DIVIDE([Operating Income], [Revenue])
+
+// Net Margin %
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.0%
+// Hidden: false
+// Net Income / Revenue for the latest period in context. Same definition as 01-base [Net Income Margin %].
+
+Net Margin % =
+DIVIDE([Net Income], [Revenue])
+
+// R&D % of Revenue
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.0%
+// Hidden: false
+// R&D Expense / Revenue for the latest period in context.
+
+R&D % of Revenue =
+DIVIDE([R&D Expense], [Revenue])
+
+// ROE
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.0%
+// Hidden: false
+// Net Income / Average Equity. Average is (ending + prior fiscal-quarter-end) / 2, or ending if prior is missing. Not annualized in a quarterly context.
+
+ROE =
+DIVIDE([Net Income], [Average Equity])
+
+// ROA
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.0%
+// Hidden: false
+// Net Income / Average Assets. Average is (ending + prior fiscal-quarter-end) / 2, or ending if prior is missing. Not annualized in a quarterly context.
+
+ROA =
+DIVIDE([Net Income], [Average Assets])
+
+// Current Ratio
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+// Current Assets / Current Liabilities (point-in-time, latest period).
+
+Current Ratio =
+DIVIDE([Current Assets], [Current Liabilities])
+
+// Quick Ratio
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+//  (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. A missing Marketable Securities amount is treated as 0 (DAX BLANK in addition).
+
+Quick Ratio =
+DIVIDE([Cash] + [Marketable Securities] + [Accounts Receivable], [Current Liabilities])
+
+// Cash Ratio
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+// Cash / Current Liabilities (point-in-time, latest period).
+
+Cash Ratio =
+DIVIDE([Cash], [Current Liabilities])
+
+// Liabilities to Assets
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+// Total Liabilities / Total Assets (point-in-time, latest period).
+
+Liabilities to Assets =
+DIVIDE([Total Liabilities], [Total Assets])
+
+// Equity Multiplier
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00x
+// Hidden: false
+// Average Assets / Average Equity (same average convention as ROE/ROA, so DuPont tiles).
+
+Equity Multiplier =
+DIVIDE([Average Assets], [Average Equity])
+
+// Asset Turnover
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00x
+// Hidden: false
+// Revenue / Average Assets (same average convention as ROA).
+
+Asset Turnover =
+DIVIDE([Revenue], [Average Assets])
+
+// Inventory Turnover
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00x
+// Hidden: false
+// Cost of Revenue / Average Inventory.
+
+Inventory Turnover =
+DIVIDE([Cost of Revenue], [Average Inventory])
+
+// DIO
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0.0
+// Hidden: false
+// Days inventory outstanding: Period Days × Average Inventory / Cost of Revenue. Period Days is the filing duration (not a fixed 365).
+
+DIO =
+DIVIDE([Period Days] * [Average Inventory], [Cost of Revenue])
+
+// DSO
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0.0
+// Hidden: false
+// Days sales outstanding: Period Days × Average Receivables / Revenue. Period Days is the filing duration (not a fixed 365).
+
+DSO =
+DIVIDE([Period Days] * [Average Receivables], [Revenue])
+
+// CFO to Net Income
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+// Operating Cash Flow / Net Income (cash conversion). Meaningful when both are annual or the same window; if [Cash Flow Is YTD] and income is a standalone quarter, the ratio mixes YTD cash with quarterly earnings — treat as blank for analysis in that case is left to the report (the measure still computes).
+
+CFO to Net Income =
+DIVIDE([Operating Cash Flow], [Net Income])
+
+// Revenue YoY Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Revenue minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR.
+
+Revenue YoY Change =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Revenue]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+_curr - _prior
+
+// Revenue QoQ Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Revenue minus the prior fiscal quarter (Q1 wraps to prior FY Q4). BLANK when the latest period is the annual 10-K (FY / duration > 300 days), so annual totals are not compared to a quarter.
+
+Revenue QoQ Change =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Revenue]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _fp =
+    CALCULATE(
+        MAX('Income Statement'[fiscal_period]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _days =
+    CALCULATE(
+        MAX('Income Statement'[duration_days]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _annual = _fp = "FY" || _days > 300
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+IF(_annual, BLANK(), _curr - _prior)
+
+// Revenue QoQ %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// QoQ change in Revenue as a % of the prior fiscal quarter. BLANK when the latest period is annual.
+
+Revenue QoQ % =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Revenue]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _fp =
+    CALCULATE(
+        MAX('Income Statement'[fiscal_period]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _days =
+    CALCULATE(
+        MAX('Income Statement'[duration_days]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _annual = _fp = "FY" || _days > 300
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+IF(_annual, BLANK(), DIVIDE(_curr - _prior, _prior))
+
+// Net Income YoY Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Net Income minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR.
+
+Net Income YoY Change =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Net Income]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Net Income],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+_curr - _prior
+
+// Net Income YoY %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// YoY change in Net Income as a % of the prior fiscal-year same quarter. Uses fiscal calendar, not SAMEPERIODLASTYEAR.
+
+Net Income YoY % =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Net Income]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Net Income],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)
+
+// Net Income QoQ Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Net Income minus the prior fiscal quarter (Q1 wraps to prior FY Q4). BLANK when the latest period is the annual 10-K (FY / duration > 300 days), so annual totals are not compared to a quarter.
+
+Net Income QoQ Change =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Net Income]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _fp =
+    CALCULATE(
+        MAX('Income Statement'[fiscal_period]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _days =
+    CALCULATE(
+        MAX('Income Statement'[duration_days]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _annual = _fp = "FY" || _days > 300
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Net Income],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+IF(_annual, BLANK(), _curr - _prior)
+
+// Net Income QoQ %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// QoQ change in Net Income as a % of the prior fiscal quarter. BLANK when the latest period is annual.
+
+Net Income QoQ % =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Net Income]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _fp =
+    CALCULATE(
+        MAX('Income Statement'[fiscal_period]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _days =
+    CALCULATE(
+        MAX('Income Statement'[duration_days]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _annual = _fp = "FY" || _days > 300
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Net Income],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+IF(_annual, BLANK(), DIVIDE(_curr - _prior, _prior))
+
+// Total Assets YoY Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Total Assets minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR.
+
+Total Assets YoY Change =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Assets]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Assets],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+_curr - _prior
+
+// Total Assets YoY %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// YoY change in Total Assets as a % of the prior fiscal-year same quarter. Uses fiscal calendar, not SAMEPERIODLASTYEAR.
+
+Total Assets YoY % =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Assets]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Assets],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)
+
+// Total Assets QoQ Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Total Assets minus the prior fiscal quarter (Q1 wraps to prior FY Q4). Point-in-time; valid at fiscal year-end (Q4 vs Q3).
+
+Total Assets QoQ Change =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Assets]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Assets],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+_curr - _prior
+
+// Total Assets QoQ %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// QoQ change in Total Assets as a % of the prior fiscal quarter.
+
+Total Assets QoQ % =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Assets]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Assets],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)
+
+// Equity YoY Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Equity minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR.
+
+Equity YoY Change =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Equity]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Equity],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+_curr - _prior
+
+// Equity YoY %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// YoY change in Equity as a % of the prior fiscal-year same quarter. Uses fiscal calendar, not SAMEPERIODLASTYEAR.
+
+Equity YoY % =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Equity]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Equity],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)
+
+// Equity QoQ Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Equity minus the prior fiscal quarter (Q1 wraps to prior FY Q4). Point-in-time; valid at fiscal year-end (Q4 vs Q3).
+
+Equity QoQ Change =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Equity]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Equity],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+_curr - _prior
+
+// Equity QoQ %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// QoQ change in Equity as a % of the prior fiscal quarter.
+
+Equity QoQ % =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Equity]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Equity],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)
+
+// Cash YoY Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Cash minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR.
+
+Cash YoY Change =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Cash]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Cash],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+_curr - _prior
+
+// Cash YoY %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// YoY change in Cash as a % of the prior fiscal-year same quarter. Uses fiscal calendar, not SAMEPERIODLASTYEAR.
+
+Cash YoY % =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Cash]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Cash],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)
+
+// Cash QoQ Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Cash minus the prior fiscal quarter (Q1 wraps to prior FY Q4). Point-in-time; valid at fiscal year-end (Q4 vs Q3).
+
+Cash QoQ Change =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Cash]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Cash],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+_curr - _prior
+
+// Cash QoQ %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// QoQ change in Cash as a % of the prior fiscal quarter.
+
+Cash QoQ % =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Cash]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Cash],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)
+
+// TTM Revenue
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Trailing four standalone fiscal quarters of Revenue. Q4 is derived as FY − Q1 − Q2 − Q3 only when those three quarters are present, is_latest_filing, and not is_ytd. If the current period is the annual 10-K (FY or duration > 300 days), this equals [Revenue].
+
+TTM Revenue =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _fp =
+    CALCULATE(
+        MAX('Income Statement'[fiscal_period]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _days =
+    CALCULATE(
+        MAX('Income Statement'[duration_days]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _annual = _fp = "FY" || _days > 300
+VAR _q0_fy = _fy
+VAR _q0_fq = _fq
+VAR _q1_fy = IF(_q0_fq = 1, _q0_fy - 1, _q0_fy)
+VAR _q1_fq = IF(_q0_fq = 1, 4, _q0_fq - 1)
+VAR _q2_fy = IF(_q1_fq = 1, _q1_fy - 1, _q1_fy)
+VAR _q2_fq = IF(_q1_fq = 1, 4, _q1_fq - 1)
+VAR _q3_fy = IF(_q2_fq = 1, _q2_fy - 1, _q2_fy)
+VAR _q3_fq = IF(_q2_fq = 1, 4, _q2_fq - 1)
+VAR _pairs =
+    UNION(
+        ROW("fy", _q0_fy, "fq", _q0_fq),
+        ROW("fy", _q1_fy, "fq", _q1_fq),
+        ROW("fy", _q2_fy, "fq", _q2_fq),
+        ROW("fy", _q3_fy, "fq", _q3_fq)
+    )
+VAR _ttm =
+    SUMX(
+        _pairs,
+        VAR _y = [fy]
+        VAR _q = [fq]
+        VAR _qtr =
+            IF(
+                _q < 4,
+                CALCULATE(
+                    [Revenue],
+                    REMOVEFILTERS('Date'),
+                    'Income Statement'[fiscal_year] = _y,
+                    'Income Statement'[fiscal_period] = "Q" & _q,
+                    'Income Statement'[is_latest_filing] = TRUE(),
+                    'Income Statement'[is_ytd] = FALSE()
+                ),
+                VAR _ann =
+                    CALCULATE(
+                        [Revenue],
+                        REMOVEFILTERS('Date'),
+                        'Income Statement'[fiscal_year] = _y,
+                        'Income Statement'[fiscal_period] = "FY",
+                        'Income Statement'[is_latest_filing] = TRUE()
+                    )
+                VAR _qa =
+                    CALCULATE(
+                        [Revenue],
+                        REMOVEFILTERS('Date'),
+                        'Income Statement'[fiscal_year] = _y,
+                        'Income Statement'[fiscal_period] = "Q1",
+                        'Income Statement'[is_latest_filing] = TRUE(),
+                        'Income Statement'[is_ytd] = FALSE()
+                    )
+                VAR _qb =
+                    CALCULATE(
+                        [Revenue],
+                        REMOVEFILTERS('Date'),
+                        'Income Statement'[fiscal_year] = _y,
+                        'Income Statement'[fiscal_period] = "Q2",
+                        'Income Statement'[is_latest_filing] = TRUE(),
+                        'Income Statement'[is_ytd] = FALSE()
+                    )
+                VAR _qc =
+                    CALCULATE(
+                        [Revenue],
+                        REMOVEFILTERS('Date'),
+                        'Income Statement'[fiscal_year] = _y,
+                        'Income Statement'[fiscal_period] = "Q3",
+                        'Income Statement'[is_latest_filing] = TRUE(),
+                        'Income Statement'[is_ytd] = FALSE()
+                    )
+                RETURN
+                IF(
+                    ISBLANK(_ann) || ISBLANK(_qa) || ISBLANK(_qb) || ISBLANK(_qc),
+                    BLANK(),
+                    _ann - _qa - _qb - _qc
+                )
+            )
+        RETURN
+        _qtr
+    )
+RETURN
+IF(_annual, [Revenue], _ttm)
+
+// TTM Net Income
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Trailing four standalone fiscal quarters of Net Income. Q4 is derived as FY − Q1 − Q2 − Q3 only when those quarters are present, is_latest_filing, and not is_ytd. If the current period is the annual 10-K, this equals [Net Income].
+
+TTM Net Income =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _fp =
+    CALCULATE(
+        MAX('Income Statement'[fiscal_period]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _days =
+    CALCULATE(
+        MAX('Income Statement'[duration_days]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _annual = _fp = "FY" || _days > 300
+VAR _q0_fy = _fy
+VAR _q0_fq = _fq
+VAR _q1_fy = IF(_q0_fq = 1, _q0_fy - 1, _q0_fy)
+VAR _q1_fq = IF(_q0_fq = 1, 4, _q0_fq - 1)
+VAR _q2_fy = IF(_q1_fq = 1, _q1_fy - 1, _q1_fy)
+VAR _q2_fq = IF(_q1_fq = 1, 4, _q1_fq - 1)
+VAR _q3_fy = IF(_q2_fq = 1, _q2_fy - 1, _q2_fy)
+VAR _q3_fq = IF(_q2_fq = 1, 4, _q2_fq - 1)
+VAR _pairs =
+    UNION(
+        ROW("fy", _q0_fy, "fq", _q0_fq),
+        ROW("fy", _q1_fy, "fq", _q1_fq),
+        ROW("fy", _q2_fy, "fq", _q2_fq),
+        ROW("fy", _q3_fy, "fq", _q3_fq)
+    )
+VAR _ttm =
+    SUMX(
+        _pairs,
+        VAR _y = [fy]
+        VAR _q = [fq]
+        VAR _qtr =
+            IF(
+                _q < 4,
+                CALCULATE(
+                    [Net Income],
+                    REMOVEFILTERS('Date'),
+                    'Income Statement'[fiscal_year] = _y,
+                    'Income Statement'[fiscal_period] = "Q" & _q,
+                    'Income Statement'[is_latest_filing] = TRUE(),
+                    'Income Statement'[is_ytd] = FALSE()
+                ),
+                VAR _ann =
+                    CALCULATE(
+                        [Net Income],
+                        REMOVEFILTERS('Date'),
+                        'Income Statement'[fiscal_year] = _y,
+                        'Income Statement'[fiscal_period] = "FY",
+                        'Income Statement'[is_latest_filing] = TRUE()
+                    )
+                VAR _qa =
+                    CALCULATE(
+                        [Net Income],
+                        REMOVEFILTERS('Date'),
+                        'Income Statement'[fiscal_year] = _y,
+                        'Income Statement'[fiscal_period] = "Q1",
+                        'Income Statement'[is_latest_filing] = TRUE(),
+                        'Income Statement'[is_ytd] = FALSE()
+                    )
+                VAR _qb =
+                    CALCULATE(
+                        [Net Income],
+                        REMOVEFILTERS('Date'),
+                        'Income Statement'[fiscal_year] = _y,
+                        'Income Statement'[fiscal_period] = "Q2",
+                        'Income Statement'[is_latest_filing] = TRUE(),
+                        'Income Statement'[is_ytd] = FALSE()
+                    )
+                VAR _qc =
+                    CALCULATE(
+                        [Net Income],
+                        REMOVEFILTERS('Date'),
+                        'Income Statement'[fiscal_year] = _y,
+                        'Income Statement'[fiscal_period] = "Q3",
+                        'Income Statement'[is_latest_filing] = TRUE(),
+                        'Income Statement'[is_ytd] = FALSE()
+                    )
+                RETURN
+                IF(
+                    ISBLANK(_ann) || ISBLANK(_qa) || ISBLANK(_qb) || ISBLANK(_qc),
+                    BLANK(),
+                    _ann - _qa - _qb - _qc
+                )
+            )
+        RETURN
+        _qtr
+    )
+RETURN
+IF(_annual, [Net Income], _ttm)
+
+// Revenue CAGR 3Y
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// 3-year compound annual growth of fiscal-year Revenue: (Rev_FY / Rev_FY-3)^(1/3) − 1. Always uses annual (fiscal year-end) Revenue, not a quarterly figure.
+
+Revenue CAGR 3Y =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _curr =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy,
+        'Date'[is_fiscal_year_end] = TRUE()
+    )
+VAR _base =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 3,
+        'Date'[is_fiscal_year_end] = TRUE()
+    )
+RETURN
+POWER(DIVIDE(_curr, _base), 1 / 3) - 1
+
+// Revenue CAGR 5Y
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// 5-year compound annual growth of fiscal-year Revenue: (Rev_FY / Rev_FY-5)^(1/5) − 1. Always uses annual (fiscal year-end) Revenue. [Revenue] already coalesces Revenues and RevenueFromContractWithCustomerExcludingAssessedTax.
+
+Revenue CAGR 5Y =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _curr =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy,
+        'Date'[is_fiscal_year_end] = TRUE()
+    )
+VAR _base =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 5,
+        'Date'[is_fiscal_year_end] = TRUE()
+    )
+RETURN
+POWER(DIVIDE(_curr, _base), 1 / 5) - 1
+
+// Common Size %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// Selected Line Item amount at the latest period_end (is_latest_filing) as a % of Revenue (income statement and cash flow) or Total Assets (balance sheet). Requires a single selected line item.
+
+Common Size % =
+VAR _stmt = SELECTEDVALUE('Line Item'[statement])
+VAR _concept = SELECTEDVALUE('Line Item'[concept])
+VAR _end =
+    SWITCH(
+        _stmt,
+        "balance_sheet",
+            CALCULATE(MAX('Balance Sheet'[period_end]), 'Balance Sheet'[is_latest_filing] = TRUE()),
+        "income_statement",
+            CALCULATE(MAX('Income Statement'[period_end]), 'Income Statement'[is_latest_filing] = TRUE()),
+        "cash_flow",
+            CALCULATE(MAX('Cash Flow'[period_end]), 'Cash Flow'[is_latest_filing] = TRUE())
+    )
+VAR _amt =
+    SWITCH(
+        _stmt,
+        "balance_sheet",
+            CALCULATE(
+                SUM('Balance Sheet'[value_usd]),
+                'Balance Sheet'[concept] = _concept,
+                'Balance Sheet'[is_latest_filing] = TRUE(),
+                'Balance Sheet'[period_end] = _end
+            ),
+        "income_statement",
+            CALCULATE(
+                SUM('Income Statement'[value_usd]),
+                'Income Statement'[concept] = _concept,
+                'Income Statement'[is_latest_filing] = TRUE(),
+                'Income Statement'[period_end] = _end
+            ),
+        "cash_flow",
+            CALCULATE(
+                SUM('Cash Flow'[value_usd]),
+                'Cash Flow'[concept] = _concept,
+                'Cash Flow'[is_latest_filing] = TRUE(),
+                'Cash Flow'[period_end] = _end
+            )
+    )
+VAR _base =
+    SWITCH(
+        _stmt,
+        "balance_sheet", [Total Assets],
+        "income_statement", [Revenue],
+        "cash_flow", [Revenue]
+    )
+RETURN
+DIVIDE(_amt, _base)
+
+// DuPont ROE
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// DuPont decomposition: Net Margin × Asset Turnover × Equity Multiplier. With average balances this equals [ROE].
+
+DuPont ROE =
+[Net Margin %] * [Asset Turnover] * [Equity Multiplier]
+
+// DuPont Check
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0000%
+// Hidden: false
+// DuPont ROE minus ROE. Should be ~0 when averages are used consistently. A material value signals a filter or missing-balance issue.
+
+DuPont Check =
+[DuPont ROE] - [ROE]

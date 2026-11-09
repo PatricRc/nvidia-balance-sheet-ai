@@ -4,7 +4,7 @@ A Microsoft Fabric + Power BI portfolio project: SEC EDGAR companyfacts land onc
 
 **Guiding question:** *How has NVIDIA's financial position changed?*
 
-> **Status: Gold tables + calendar + Direct Lake model notebook ready.** After gold and `gold.dim_date` exist, import `fabric/notebooks/nb_semantic_model.ipynb`, attach `NVIDIALakehouse`, set the kernel to **Python**, Run all → model **NVIDIA Financials**. Report pages, Publish to web, Claude batch, and chatbot are not built yet.
+> **Status: Gold tables + calendar + Direct Lake model + KPI/ratio/analysis measures ready.** After gold, `gold.dim_date`, and `nb_semantic_model.ipynb` have been run (model **NVIDIA Financials** exists), import `fabric/notebooks/nb_measures_financial.ipynb`, attach `NVIDIALakehouse`, kernel **Python**, Run all. Report pages, Publish to web, Claude batch, and chatbot are not built yet.
 
 ## The story in four pages
 
@@ -35,7 +35,7 @@ gold.balance_sheet + gold.income_statement + gold.cash_flow
   + gold.dim_filing + gold.dim_line_item
   primary-period + latest-filed rules; identity check
         │
-        ├──► Direct Lake model **NVIDIA Financials** (`nb_semantic_model.ipynb`) ──► Power BI report (4 pages)
+        ├──► Direct Lake model **NVIDIA Financials** (`nb_semantic_model.ipynb` + `nb_measures_financial.ipynb`) ──► Power BI report (4 pages)
         │
         └──► Claude Messages API  (batch, server-side)
                 key in Azure Key Vault only
@@ -75,12 +75,15 @@ Claude is a **citation engine over gold**, not a free-form equity analyst.
 ## Repository layout
 
 ```
-dax/             DAX measures, one .dax file each (commented header), by page
+dax/             DAX measures, one .dax file each (commented header)
   01-base/              core BS totals, ratios, period helpers
-  02-page1-snapshot/    page 1 measures
-  03-page2-liquidity/   page 2 measures
-  04-page3-debt/        page 3 measures
-  05-page4-ai-notes/    page 4 measures (insight cards, review status)
+  02-kpi/               gross profit, WC, R&D, EPS, buybacks, dividends
+  03-ratios/            margins, ROE/ROA, liquidity, turnover, DIO/DSO
+  04-analysis/          QoQ/YoY, TTM, CAGR, common-size %, DuPont
+  02-page1-snapshot/    later page 1 measures (stub)
+  03-page2-liquidity/   later page 2 measures (stub)
+  04-page3-debt/        later page 3 measures (stub)
+  05-page4-ai-notes/    later page 4 measures (stub)
   06-html-cards/        KPI cards + insight panels (HTML Content visual)
   07-svg-visuals/       charts drawn in DAX as SVG (Image URL)
   08–11-page*-layout/   framed cards, headers and rail per page
@@ -111,7 +114,8 @@ Microsoft Fabric (Lakehouse, Notebooks, OneLake, Direct Lake) · Delta Lake · P
 | Day 1 | README, folder scaffold, `.gitignore`, `.env.example` | **Done** |
 | Ingest | `nb_bronze_silver_gold_sec_edgar.ipynb` — bronze SEC JSON + `silver.financial_fact` + `gold.balance_sheet` / `income_statement` / `cash_flow` | **Done (notebook in repo; run in Fabric)** |
 | Calendar | `nb_gold_dim_date.ipynb` — `gold.dim_date` | **Done (run in Fabric)** |
-| Model | `nb_semantic_model.ipynb` — Direct Lake **NVIDIA Financials**, relationships, 01-base measures | **Notebook in repo; run in Fabric (Python kernel)** |
+| Model | `nb_semantic_model.ipynb` — Direct Lake **NVIDIA Financials**, relationships, 01-base measures | **Done (run in Fabric)** |
+| Measures | `nb_measures_financial.ipynb` — 02-kpi / 03-ratios / 04-analysis, validated vs gold | **Notebook in repo; run in Fabric (Python kernel)** |
 | Next | First report page + Publish to web | Not started |
 | | Claude batch notebook → `gold.ai_insight` + page 4 | Not started |
 | | Phase 2 HTML/FastAPI chatbot linked from the report | Not started |
@@ -122,7 +126,7 @@ Microsoft Fabric (Lakehouse, Notebooks, OneLake, Direct Lake) · Delta Lake · P
 
 1. Set `SEC_USER_AGENT` (and pull Claude credentials from Key Vault — never commit them).
 2. Run bronze → silver → gold notebooks in the Fabric workspace / lakehouse named in `.env.example`.
-3. Re-run gold (`nb_bronze_silver_gold_sec_edgar`) so date columns are Delta Date, then `nb_gold_dim_date` (checks still apply), then `nb_semantic_model.ipynb` (Python kernel, lakehouse attached) to create **NVIDIA Financials**.
+3. Re-run gold (`nb_bronze_silver_gold_sec_edgar`) so date columns are Delta Date, then `nb_gold_dim_date` (checks still apply), then `nb_semantic_model.ipynb` (Python kernel, lakehouse attached) to create **NVIDIA Financials**, then `nb_measures_financial.ipynb` (same kernel and lakehouse) for KPI/ratio/analysis measures. Last cell must print OVERALL: PASS.
 4. Apply `powerbi/` theme when generated.
 5. Only after gold is hand-checked against the filing: run the Claude batch job and review `ai_insight` rows before publishing page 4.
 

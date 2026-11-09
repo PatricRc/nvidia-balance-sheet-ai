@@ -1,0 +1,9 @@
+// Net Margin %
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.0%
+// Hidden: false
+// Net Income / Revenue for the latest period in context. Same definition as 01-base [Net Income Margin %].
+
+Net Margin % =
+DIVIDE([Net Income], [Revenue])

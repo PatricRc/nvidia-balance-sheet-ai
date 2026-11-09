@@ -1,0 +1,34 @@
+// Total Assets YoY Change
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: #,##0
+// Hidden: false
+// Total Assets minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR.
+
+Total Assets YoY Change =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Assets]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Assets],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+_curr - _prior

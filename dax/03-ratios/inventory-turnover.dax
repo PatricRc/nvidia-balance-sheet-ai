@@ -1,0 +1,9 @@
+// Inventory Turnover
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00x
+// Hidden: false
+// Cost of Revenue / Average Inventory.
+
+Inventory Turnover =
+DIVIDE([Cost of Revenue], [Average Inventory])

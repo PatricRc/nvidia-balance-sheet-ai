@@ -1,0 +1,9 @@
+// DuPont Check
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0000%
+// Hidden: false
+// DuPont ROE minus ROE. Should be ~0 when averages are used consistently. A material value signals a filter or missing-balance issue.
+
+DuPont Check =
+[DuPont ROE] - [ROE]

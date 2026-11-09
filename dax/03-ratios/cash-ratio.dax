@@ -1,0 +1,9 @@
+// Cash Ratio
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+// Cash / Current Liabilities (point-in-time, latest period).
+
+Cash Ratio =
+DIVIDE([Cash], [Current Liabilities])

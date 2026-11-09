@@ -1,0 +1,9 @@
+// Working Capital
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Current Assets minus Current Liabilities (both point-in-time, latest period).
+
+Working Capital =
+[Current Assets] - [Current Liabilities]

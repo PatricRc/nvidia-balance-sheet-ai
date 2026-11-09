@@ -1,0 +1,9 @@
+// Liabilities to Assets
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+// Total Liabilities / Total Assets (point-in-time, latest period).
+
+Liabilities to Assets =
+DIVIDE([Total Liabilities], [Total Assets])

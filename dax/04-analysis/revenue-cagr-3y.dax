@@ -1,0 +1,31 @@
+// Revenue CAGR 3Y
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// 3-year compound annual growth of fiscal-year Revenue: (Rev_FY / Rev_FY-3)^(1/3) − 1. Always uses annual (fiscal year-end) Revenue, not a quarterly figure.
+
+Revenue CAGR 3Y =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _curr =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy,
+        'Date'[is_fiscal_year_end] = TRUE()
+    )
+VAR _base =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 3,
+        'Date'[is_fiscal_year_end] = TRUE()
+    )
+RETURN
+POWER(DIVIDE(_curr, _base), 1 / 3) - 1

@@ -1,0 +1,34 @@
+// Net Income YoY %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// YoY change in Net Income as a % of the prior fiscal-year same quarter. Uses fiscal calendar, not SAMEPERIODLASTYEAR.
+
+Net Income YoY % =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Net Income]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 1,
+        'Date'[fiscal_quarter] = _fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Net Income],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)

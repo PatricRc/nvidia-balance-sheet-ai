@@ -1,0 +1,36 @@
+// Average Equity
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0
+// Hidden: false
+// Average of current and prior fiscal-quarter-end Total Equity (Q1 wraps to prior FY Q4). If the prior balance is missing, uses ending Total Equity.
+
+Average Equity =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Total Equity]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Total Equity],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+IF(ISBLANK(_prior), _curr, DIVIDE(_curr + _prior, 2))

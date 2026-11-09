@@ -1,0 +1,31 @@
+// Revenue CAGR 5Y
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// 5-year compound annual growth of fiscal-year Revenue: (Rev_FY / Rev_FY-5)^(1/5) − 1. Always uses annual (fiscal year-end) Revenue. [Revenue] already coalesces Revenues and RevenueFromContractWithCustomerExcludingAssessedTax.
+
+Revenue CAGR 5Y =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _curr =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy,
+        'Date'[is_fiscal_year_end] = TRUE()
+    )
+VAR _base =
+    CALCULATE(
+        [Revenue],
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy - 5,
+        'Date'[is_fiscal_year_end] = TRUE()
+    )
+RETURN
+POWER(DIVIDE(_curr, _base), 1 / 5) - 1

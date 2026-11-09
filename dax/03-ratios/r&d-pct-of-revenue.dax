@@ -1,0 +1,9 @@
+// R&D % of Revenue
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.0%
+// Hidden: false
+// R&D Expense / Revenue for the latest period in context.
+
+R&D % of Revenue =
+DIVIDE([R&D Expense], [Revenue])

@@ -1,0 +1,20 @@
+// EPS Diluted
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: 0.00
+// Hidden: false
+// Duration EarningsPerShareDiluted (USD/shares) at the latest period_end (is_latest_filing).
+
+EPS Diluted =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Income Statement'[value_usd]),
+    'Income Statement'[concept] = "EarningsPerShareDiluted",
+    'Income Statement'[is_latest_filing] = TRUE(),
+    'Income Statement'[period_end] = _end
+)

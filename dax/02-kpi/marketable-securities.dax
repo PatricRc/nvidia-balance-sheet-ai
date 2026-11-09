@@ -1,0 +1,20 @@
+// Marketable Securities
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Point-in-time MarketableSecuritiesCurrent at the latest period_end. May be blank in some years (e.g. FY2026 companyfacts).
+
+Marketable Securities =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "MarketableSecuritiesCurrent",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)

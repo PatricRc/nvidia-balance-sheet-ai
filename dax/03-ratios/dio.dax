@@ -1,0 +1,9 @@
+// DIO
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0.0
+// Hidden: false
+// Days inventory outstanding: Period Days × Average Inventory / Cost of Revenue. Period Days is the filing duration (not a fixed 365).
+
+DIO =
+DIVIDE([Period Days] * [Average Inventory], [Cost of Revenue])

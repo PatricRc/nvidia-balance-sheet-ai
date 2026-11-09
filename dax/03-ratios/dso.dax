@@ -1,0 +1,9 @@
+// DSO
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: #,##0.0
+// Hidden: false
+// Days sales outstanding: Period Days × Average Receivables / Revenue. Period Days is the filing duration (not a fixed 365).
+
+DSO =
+DIVIDE([Period Days] * [Average Receivables], [Revenue])

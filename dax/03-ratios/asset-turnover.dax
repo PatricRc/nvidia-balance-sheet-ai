@@ -1,0 +1,9 @@
+// Asset Turnover
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00x
+// Hidden: false
+// Revenue / Average Assets (same average convention as ROA).
+
+Asset Turnover =
+DIVIDE([Revenue], [Average Assets])

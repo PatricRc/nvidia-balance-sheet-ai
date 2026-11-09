@@ -1,0 +1,9 @@
+// Operating Margin %
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.0%
+// Hidden: false
+// Operating Income / Revenue for the latest period in context.
+
+Operating Margin % =
+DIVIDE([Operating Income], [Revenue])

@@ -1,0 +1,9 @@
+// Current Ratio
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+// Current Assets / Current Liabilities (point-in-time, latest period).
+
+Current Ratio =
+DIVIDE([Current Assets], [Current Liabilities])

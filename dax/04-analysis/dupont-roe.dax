@@ -1,0 +1,9 @@
+// DuPont ROE
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// DuPont decomposition: Net Margin × Asset Turnover × Equity Multiplier. With average balances this equals [ROE].
+
+DuPont ROE =
+[Net Margin %] * [Asset Turnover] * [Equity Multiplier]

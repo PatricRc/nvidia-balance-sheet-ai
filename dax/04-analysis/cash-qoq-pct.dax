@@ -1,0 +1,36 @@
+// Cash QoQ %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// QoQ change in Cash as a % of the prior fiscal quarter.
+
+Cash QoQ % =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _curr = [Cash]
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _prior_fy = IF(_fq = 1, _fy - 1, _fy)
+VAR _prior_fq = IF(_fq = 1, 4, _fq - 1)
+VAR _prior_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _prior_fy,
+        'Date'[fiscal_quarter] = _prior_fq,
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _prior =
+    CALCULATE(
+        [Cash],
+        REMOVEFILTERS('Date'),
+        'Date'[date] = _prior_end
+    )
+RETURN
+DIVIDE(_curr - _prior, _prior)

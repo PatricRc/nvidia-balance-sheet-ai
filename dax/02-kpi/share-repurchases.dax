@@ -1,0 +1,20 @@
+// Share Repurchases
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Duration PaymentsForRepurchaseOfCommonStock at the latest period_end (is_latest_filing). 10-Q may be YTD; see [Cash Flow Is YTD].
+
+Share Repurchases =
+VAR _end =
+    CALCULATE(
+        MAX('Cash Flow'[period_end]),
+        'Cash Flow'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Cash Flow'[value_usd]),
+    'Cash Flow'[concept] = "PaymentsForRepurchaseOfCommonStock",
+    'Cash Flow'[is_latest_filing] = TRUE(),
+    'Cash Flow'[period_end] = _end
+)

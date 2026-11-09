@@ -1,0 +1,54 @@
+// Common Size %
+// Table: Balance Sheet
+// Display folder: 04-analysis
+// Format: 0.0%
+// Hidden: false
+// Selected Line Item amount at the latest period_end (is_latest_filing) as a % of Revenue (income statement and cash flow) or Total Assets (balance sheet). Requires a single selected line item.
+
+Common Size % =
+VAR _stmt = SELECTEDVALUE('Line Item'[statement])
+VAR _concept = SELECTEDVALUE('Line Item'[concept])
+VAR _end =
+    SWITCH(
+        _stmt,
+        "balance_sheet",
+            CALCULATE(MAX('Balance Sheet'[period_end]), 'Balance Sheet'[is_latest_filing] = TRUE()),
+        "income_statement",
+            CALCULATE(MAX('Income Statement'[period_end]), 'Income Statement'[is_latest_filing] = TRUE()),
+        "cash_flow",
+            CALCULATE(MAX('Cash Flow'[period_end]), 'Cash Flow'[is_latest_filing] = TRUE())
+    )
+VAR _amt =
+    SWITCH(
+        _stmt,
+        "balance_sheet",
+            CALCULATE(
+                SUM('Balance Sheet'[value_usd]),
+                'Balance Sheet'[concept] = _concept,
+                'Balance Sheet'[is_latest_filing] = TRUE(),
+                'Balance Sheet'[period_end] = _end
+            ),
+        "income_statement",
+            CALCULATE(
+                SUM('Income Statement'[value_usd]),
+                'Income Statement'[concept] = _concept,
+                'Income Statement'[is_latest_filing] = TRUE(),
+                'Income Statement'[period_end] = _end
+            ),
+        "cash_flow",
+            CALCULATE(
+                SUM('Cash Flow'[value_usd]),
+                'Cash Flow'[concept] = _concept,
+                'Cash Flow'[is_latest_filing] = TRUE(),
+                'Cash Flow'[period_end] = _end
+            )
+    )
+VAR _base =
+    SWITCH(
+        _stmt,
+        "balance_sheet", [Total Assets],
+        "income_statement", [Revenue],
+        "cash_flow", [Revenue]
+    )
+RETURN
+DIVIDE(_amt, _base)

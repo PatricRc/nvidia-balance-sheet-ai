@@ -1,0 +1,9 @@
+// Quick Ratio
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+//  (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. A missing Marketable Securities amount is treated as 0 (DAX BLANK in addition).
+
+Quick Ratio =
+DIVIDE([Cash] + [Marketable Securities] + [Accounts Receivable], [Current Liabilities])

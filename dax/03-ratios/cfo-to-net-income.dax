@@ -1,0 +1,9 @@
+// CFO to Net Income
+// Table: Balance Sheet
+// Display folder: 03-ratios
+// Format: 0.00
+// Hidden: false
+// Operating Cash Flow / Net Income (cash conversion). Meaningful when both are annual or the same window; if [Cash Flow Is YTD] and income is a standalone quarter, the ratio mixes YTD cash with quarterly earnings — treat as blank for analysis in that case is left to the report (the measure still computes).
+
+CFO to Net Income =
+DIVIDE([Operating Cash Flow], [Net Income])
