@@ -1,6 +1,6 @@
 // TTM Net Income
-// Table: Balance Sheet
-// Display folder: 04-analysis
+// Table: _Measures
+// Display folder: Category\04 Analysis\TTM;Pages\00 Cover;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Trailing four standalone fiscal quarters of Net Income ending at the latest period in context ([Net Income Standalone Quarter], so Q4 = FY − Q1 − Q2 − Q3). BLANK unless all four quarters exist. If the current period is the annual 10-K (FY or duration > 300 days), this equals [Net Income].

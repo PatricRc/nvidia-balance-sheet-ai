@@ -1,6 +1,6 @@
 // Long-Term Debt Current
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Balance Sheet;Pages\03 Debt & Net Cash;Pages\04 Notes & Evidence;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Point-in-time LongTermDebtCurrent (current portion of long-term debt) at the latest period_end (is_latest_filing). Tagged by NVIDIA from FY2020; earlier periods are BLANK.

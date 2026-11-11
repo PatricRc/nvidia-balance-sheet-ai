@@ -1,6 +1,6 @@
 // ROA
-// Table: Balance Sheet
-// Display folder: 03-ratios
+// Table: _Measures
+// Display folder: Category\03 Ratios\Profitability;Pages\04 Notes & Evidence
 // Format: 0.0%
 // Hidden: false
 // Net Income / Average Assets. Average is (ending + prior-period-end) / 2, prior FY end at year grain, or ending if prior is missing. Not annualized in a quarterly context.

@@ -1,6 +1,6 @@
 // Cash from Financing
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Cash Flow;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Duration NetCashProvidedByUsedInFinancingActivities at the latest period_end (is_latest_filing). 10-Q may be YTD.

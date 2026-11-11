@@ -1,0 +1,85 @@
+name,subject,pages
+Total Assets,Balance Sheet,00 Cover;01 Financial Position;04 Notes & Evidence;05 Financial Statements
+Total Liabilities,Balance Sheet,01 Financial Position;04 Notes & Evidence;05 Financial Statements
+Total Equity,Balance Sheet,00 Cover;01 Financial Position;04 Notes & Evidence;05 Financial Statements
+Cash,Balance Sheet,00 Cover;02 Liquidity;04 Notes & Evidence;05 Financial Statements
+Long-Term Debt,Balance Sheet,03 Debt & Net Cash;04 Notes & Evidence;05 Financial Statements
+Revenue,Income Statement,00 Cover;05 Financial Statements
+Net Income,Income Statement,00 Cover;05 Financial Statements
+Operating Cash Flow,Cash Flow,05 Financial Statements
+CapEx,Cash Flow,05 Financial Statements
+Free Cash Flow,Cash Flow,05 Financial Statements
+Revenue YoY %,Growth,00 Cover;05 Financial Statements
+Net Income Margin %,Profitability,05 Financial Statements
+Debt to Equity,Leverage,03 Debt & Net Cash
+Cash Flow Is YTD,Period,05 Financial Statements
+Gross Profit,Income Statement,05 Financial Statements
+Operating Income,Income Statement,05 Financial Statements
+Cost of Revenue,Income Statement,05 Financial Statements
+Current Assets,Balance Sheet,01 Financial Position;04 Notes & Evidence;05 Financial Statements
+Current Liabilities,Balance Sheet,01 Financial Position;04 Notes & Evidence;05 Financial Statements
+Working Capital,Liquidity,00 Cover;01 Financial Position;02 Liquidity;04 Notes & Evidence;05 Financial Statements
+Inventory,Balance Sheet,02 Liquidity;04 Notes & Evidence;05 Financial Statements
+Accounts Receivable,Balance Sheet,02 Liquidity;04 Notes & Evidence;05 Financial Statements
+Marketable Securities,Balance Sheet,02 Liquidity;03 Debt & Net Cash;04 Notes & Evidence;05 Financial Statements
+R&D Expense,Income Statement,05 Financial Statements
+EPS Diluted,Income Statement,05 Financial Statements
+Share Repurchases,Cash Flow,05 Financial Statements
+Dividends Paid,Cash Flow,05 Financial Statements
+Cash from Investing,Cash Flow,05 Financial Statements
+Cash from Financing,Cash Flow,05 Financial Statements
+Long-Term Debt Current,Balance Sheet,03 Debt & Net Cash;04 Notes & Evidence;05 Financial Statements
+Gross Debt,Leverage,00 Cover;03 Debt & Net Cash;04 Notes & Evidence;05 Financial Statements
+Operating Lease Liabilities,Balance Sheet,03 Debt & Net Cash
+Net Cash,Liquidity,00 Cover;03 Debt & Net Cash;04 Notes & Evidence;05 Financial Statements
+Net Cash (Cash Only),Liquidity,03 Debt & Net Cash;04 Notes & Evidence;05 Financial Statements
+Period Label,Period,00 Cover;01 Financial Position;02 Liquidity;03 Debt & Net Cash;04 Notes & Evidence;05 Financial Statements
+Average Assets,Helpers,
+Average Equity,Helpers,
+Average Inventory,Helpers,
+Average Receivables,Helpers,
+Period Days,Helpers,
+Gross Margin %,Profitability,05 Financial Statements
+Operating Margin %,Profitability,05 Financial Statements
+Net Margin %,Profitability,04 Notes & Evidence;05 Financial Statements
+R&D % of Revenue,Profitability,05 Financial Statements
+ROE,Profitability,04 Notes & Evidence
+ROA,Profitability,04 Notes & Evidence
+Current Ratio,Liquidity,02 Liquidity;05 Financial Statements
+Quick Ratio,Liquidity,02 Liquidity;05 Financial Statements
+Cash Ratio,Liquidity,02 Liquidity;05 Financial Statements
+Liabilities to Assets,Leverage,01 Financial Position;03 Debt & Net Cash
+Equity Multiplier,Leverage,04 Notes & Evidence
+Asset Turnover,Efficiency,04 Notes & Evidence
+Inventory Turnover,Efficiency,02 Liquidity
+DIO,Efficiency,02 Liquidity
+DSO,Efficiency,02 Liquidity
+CFO to Net Income,Profitability,04 Notes & Evidence
+Revenue Standalone Quarter,Helpers,
+Net Income Standalone Quarter,Helpers,
+Revenue YoY Change,Growth,00 Cover;05 Financial Statements
+Revenue QoQ Change,Growth,
+Revenue QoQ %,Growth,
+Net Income YoY Change,Growth,00 Cover;05 Financial Statements
+Net Income YoY %,Growth,00 Cover;05 Financial Statements
+Net Income QoQ Change,Growth,
+Net Income QoQ %,Growth,
+Total Assets YoY Change,Growth,00 Cover;01 Financial Position
+Total Assets YoY %,Growth,01 Financial Position
+Total Assets QoQ Change,Growth,01 Financial Position
+Total Assets QoQ %,Growth,01 Financial Position
+Equity YoY Change,Growth,01 Financial Position
+Equity YoY %,Growth,01 Financial Position
+Equity QoQ Change,Growth,01 Financial Position
+Equity QoQ %,Growth,01 Financial Position
+Cash YoY Change,Growth,02 Liquidity
+Cash YoY %,Growth,02 Liquidity
+Cash QoQ Change,Growth,02 Liquidity
+Cash QoQ %,Growth,02 Liquidity
+TTM Revenue,TTM,00 Cover;05 Financial Statements
+TTM Net Income,TTM,00 Cover;05 Financial Statements
+Revenue CAGR 3Y,Growth,
+Revenue CAGR 5Y,Growth,
+Common Size %,Common Size,01 Financial Position;05 Financial Statements
+DuPont ROE,DuPont,04 Notes & Evidence
+DuPont Check,DuPont,04 Notes & Evidence

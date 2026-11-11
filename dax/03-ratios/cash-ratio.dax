@@ -1,6 +1,6 @@
 // Cash Ratio
-// Table: Balance Sheet
-// Display folder: 03-ratios
+// Table: _Measures
+// Display folder: Category\03 Ratios\Liquidity;Pages\02 Liquidity;Pages\05 Financial Statements
 // Format: 0.00
 // Hidden: false
 // Cash / Current Liabilities (point-in-time, latest period).

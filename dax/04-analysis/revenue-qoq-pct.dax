@@ -1,6 +1,6 @@
 // Revenue QoQ %
-// Table: Balance Sheet
-// Display folder: 04-analysis
+// Table: _Measures
+// Display folder: Category\04 Analysis\Growth
 // Format: 0.0%
 // Hidden: false
 // QoQ change in Revenue as a % of the prior fiscal quarter (Q1 wraps to prior FY Q4, derived as FY − Q1 − Q2 − Q3 via [Revenue Standalone Quarter] so a quarter is never compared to a full year). BLANK when the latest period is the annual 10-K, or when the prior quarter is missing.

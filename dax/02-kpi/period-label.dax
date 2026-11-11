@@ -1,6 +1,6 @@
 // Period Label
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Period;Pages\00 Cover;Pages\01 Financial Position;Pages\02 Liquidity;Pages\03 Debt & Net Cash;Pages\04 Notes & Evidence;Pages\05 Financial Statements
 // Format: 
 // Hidden: false
 // Text label for the latest balance-sheet period in context, e.g. "Q2 FY2027 · ended 2026-07-26" or "FY2026 · ended 2026-01-25". Fiscal labels only — never calendar.

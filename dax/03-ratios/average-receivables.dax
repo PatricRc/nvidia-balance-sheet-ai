@@ -1,6 +1,6 @@
 // Average Receivables
-// Table: Balance Sheet
-// Display folder: 03-ratios
+// Table: _Measures
+// Display folder: Category\03 Ratios\Helpers
 // Format: #,##0
 // Hidden: false
 // Average of ending and prior-period-end (prior FY end at year grain, prior fiscal quarter end at quarter grain) Accounts Receivable. Falls back to ending AR if the prior period is missing.

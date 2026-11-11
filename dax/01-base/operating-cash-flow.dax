@@ -1,6 +1,6 @@
 // Operating Cash Flow
-// Table: Balance Sheet
-// Display folder: 01-base
+// Table: _Measures
+// Display folder: Category\01 Base\Cash Flow;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // NetCashProvidedByUsedInOperatingActivities for the single latest period_end (is_latest_filing). 10-Q figures with duration_days > 100 are year-to-date (see [Cash Flow Is YTD]); they are kept raw — quarters are not derived.

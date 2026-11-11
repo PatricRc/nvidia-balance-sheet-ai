@@ -1,6 +1,6 @@
 // Period Days
-// Table: Balance Sheet
-// Display folder: 03-ratios
+// Table: _Measures
+// Display folder: Category\03 Ratios\Helpers
 // Format: #,##0.0
 // Hidden: true
 // Duration_days of the latest income-statement period (is_latest_filing); 365 if blank. Used as the day count for DIO/DSO (NVIDIA FY is typically 363, not 365).

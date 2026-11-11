@@ -1,6 +1,6 @@
 // Net Income Standalone Quarter
-// Table: Balance Sheet
-// Display folder: 04-analysis
+// Table: _Measures
+// Display folder: Category\04 Analysis\Helpers
 // Format: #,##0
 // Hidden: true
 // Hidden helper: Net Income for one standalone fiscal quarter. On Q1–Q3 it is [Net Income]; on the FY 10-K it derives Q4 = FY − Q1 − Q2 − Q3 (BLANK unless all three quarters exist). Used by QoQ and TTM so a quarter is never compared to a full year.

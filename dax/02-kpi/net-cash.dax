@@ -1,6 +1,6 @@
 // Net Cash
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Liquidity;Pages\00 Cover;Pages\03 Debt & Net Cash;Pages\04 Notes & Evidence;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Cash & equivalents + current Marketable Securities − Gross Debt (leases excluded). Follows [Marketable Securities] (MarketableSecuritiesCurrent, else DebtSecuritiesCurrent + EquitySecuritiesFvNi). BLANK only if Cash or Marketable Securities is BLANK; use [Net Cash (Cash Only)] when you want to exclude securities.

@@ -1,6 +1,6 @@
 // Gross Debt
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Leverage;Pages\00 Cover;Pages\03 Debt & Net Cash;Pages\04 Notes & Evidence;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Long-Term Debt (noncurrent) + Long-Term Debt Current. Excludes operating lease liabilities (see [Operating Lease Liabilities]). BLANK current portion counts as 0; BLANK when noncurrent debt is BLANK.

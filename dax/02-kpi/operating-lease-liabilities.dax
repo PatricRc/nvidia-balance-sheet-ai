@@ -1,6 +1,6 @@
 // Operating Lease Liabilities
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Balance Sheet;Pages\03 Debt & Net Cash
 // Format: #,##0
 // Hidden: false
 // OperatingLeaseLiabilityCurrent + OperatingLeaseLiabilityNoncurrent at the latest period_end (is_latest_filing). Shown separately from debt; never netted into Net Cash.

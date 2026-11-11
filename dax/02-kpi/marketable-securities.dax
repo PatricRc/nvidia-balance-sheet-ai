@@ -1,6 +1,6 @@
 // Marketable Securities
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Balance Sheet;Pages\02 Liquidity;Pages\03 Debt & Net Cash;Pages\04 Notes & Evidence;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Point-in-time current marketable securities at the latest period_end. Uses MarketableSecuritiesCurrent when present (through Q3 FY2026). Otherwise DebtSecuritiesCurrent + EquitySecuritiesFvNi at the same period_end, from the latest filing that tags them. The FY2026 10-K has neither total; FY2026 close comes from a later 10-Q comparative. Does not add EquitySecuritiesFVNINoncurrent, and does not add the fallback tags when MarketableSecuritiesCurrent is present.

@@ -1,6 +1,6 @@
 // Revenue CAGR 5Y
-// Table: Balance Sheet
-// Display folder: 04-analysis
+// Table: _Measures
+// Display folder: Category\04 Analysis\Growth
 // Format: 0.0%
 // Hidden: false
 // 5-year compound annual growth of fiscal-year Revenue for the latest COMPLETED fiscal year on or before the latest period in context: (Rev_FY / Rev_FY-5)^(1/5) − 1. An in-progress year (latest period is a 10-Q) uses the prior completed FY. BLANK when either year is missing.

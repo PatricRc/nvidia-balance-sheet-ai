@@ -1,6 +1,6 @@
 // Net Income YoY %
-// Table: Balance Sheet
-// Display folder: 04-analysis
+// Table: _Measures
+// Display folder: Category\04 Analysis\Growth;Pages\00 Cover;Pages\05 Financial Statements
 // Format: 0.0%
 // Hidden: false
 // YoY change in Net Income as a % of the prior fiscal-year same quarter. Uses fiscal calendar, not SAMEPERIODLASTYEAR.

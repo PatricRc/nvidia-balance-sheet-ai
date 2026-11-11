@@ -1,6 +1,6 @@
 // CFO to Net Income
-// Table: Balance Sheet
-// Display folder: 03-ratios
+// Table: _Measures
+// Display folder: Category\03 Ratios\Profitability;Pages\04 Notes & Evidence
 // Format: 0.00
 // Hidden: false
 // Operating Cash Flow / Net Income (cash conversion) on matching windows only. BLANK when cash flow is 10-Q YTD but Net Income is a standalone quarter (Q2/Q3), so YTD cash is never divided by one quarter of earnings.

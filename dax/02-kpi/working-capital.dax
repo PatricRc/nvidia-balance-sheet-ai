@@ -1,6 +1,6 @@
 // Working Capital
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Liquidity;Pages\00 Cover;Pages\01 Financial Position;Pages\02 Liquidity;Pages\04 Notes & Evidence;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Current Assets minus Current Liabilities (both point-in-time, latest period).

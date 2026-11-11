@@ -1,6 +1,57 @@
 # NVIDIA Financials — KPI, ratio, and analysis measures
 
-Applied by `fabric/notebooks/nb_measures_financial.ipynb` onto the **NVIDIA Financials** Direct Lake model. Host table: **Balance Sheet**. Display folders: `02-kpi`, `03-ratios`, `04-analysis`. Base totals in `01-base` (`[Revenue]`, `[Net Income]`, `[Total Assets]`, `[Total Equity]`, `[Cash]`, `[Operating Cash Flow]`, `[Debt to Equity]`, `[Revenue YoY %]`, …) are reused, not redefined.
+Applied by `fabric/notebooks/nb_semantic_model.ipynb` (14 base measures) and `fabric/notebooks/nb_measures_financial.ipynb` (the other 70) onto the **NVIDIA Financials** Direct Lake model. All 84 measures live on the calculated **`_Measures`** table. Display folders use a Category path plus, where mapped, one or more Pages paths separated by `;` (a field can appear in several folders — see [Organize your measures](https://learn.microsoft.com/power-bi/transform-model/desktop-measures)). Folder metadata is `dax/measure-folders.csv`, applied by `scripts/build_measures.py`. Base totals in `01-base` (`[Revenue]`, `[Net Income]`, `[Total Assets]`, `[Total Equity]`, `[Cash]`, `[Operating Cash Flow]`, `[Debt to Equity]`, `[Revenue YoY %]`, …) are reused, not redefined.
+
+## Measures table
+
+`_Measures` is a calculated table with expression `ROW("Dummy", BLANK())`. The `Dummy` column is hidden so the table shows the measure icon at the top of the Data pane. The table is Import mode and **does not reference any Direct Lake table or column**, which is supported in every Direct Lake mode, including Direct Lake on SQL ([Direct Lake overview](https://learn.microsoft.com/fabric/fundamentals/direct-lake-overview)). This model is Direct Lake on OneLake (`use_sql_endpoint=False`), so a lakehouse stub table is unnecessary. The notebooks create the table if it is missing and will not drop it on rerun. TOM cannot move a measure: if one is still on `Balance Sheet` (or any other table), the notebook removes it and re-adds it on `_Measures` with the same expression, format string, and description.
+
+## Display-folder tree
+
+Counts are unique measures. A measure with several Pages folders is counted in each of those pages and once under its Category subject.
+
+```
+_Measures
+├── Category
+│   ├── 01 Base (14)
+│   │   ├── Balance Sheet (5)        Total Assets, Total Liabilities, Total Equity, Cash, Long-Term Debt
+│   │   ├── Income Statement (2)     Revenue, Net Income
+│   │   ├── Cash Flow (3)            Operating Cash Flow, CapEx, Free Cash Flow
+│   │   ├── Growth (1)               Revenue YoY %
+│   │   ├── Profitability (1)        Net Income Margin %
+│   │   ├── Leverage (1)             Debt to Equity
+│   │   └── Period (1)               Cash Flow Is YTD
+│   ├── 02 KPI (21)
+│   │   ├── Balance Sheet (7)        Current Assets, Current Liabilities, Inventory, Accounts Receivable,
+│   │   │                            Marketable Securities, Long-Term Debt Current, Operating Lease Liabilities
+│   │   ├── Income Statement (5)     Gross Profit, Operating Income, Cost of Revenue, R&D Expense, EPS Diluted
+│   │   ├── Cash Flow (4)            Share Repurchases, Dividends Paid, Cash from Investing, Cash from Financing
+│   │   ├── Liquidity (3)            Working Capital, Net Cash, Net Cash (Cash Only)
+│   │   ├── Leverage (1)             Gross Debt
+│   │   └── Period (1)               Period Label
+│   ├── 03 Ratios (21)
+│   │   ├── Profitability (7)        Gross / Operating / Net Margin %, R&D % of Revenue, ROE, ROA, CFO to Net Income
+│   │   ├── Liquidity (3)            Current Ratio, Quick Ratio, Cash Ratio
+│   │   ├── Leverage (2)             Liabilities to Assets, Equity Multiplier
+│   │   ├── Efficiency (4)           Asset Turnover, Inventory Turnover, DIO, DSO
+│   │   └── Helpers (5)              Average Assets / Equity / Inventory / Receivables, Period Days
+│   └── 04 Analysis (28)
+│       ├── Growth (21)              YoY/QoQ change and % for Revenue, Net Income, Total Assets, Equity, Cash;
+│       │                            Revenue CAGR 3Y / 5Y
+│       ├── TTM (2)                  TTM Revenue, TTM Net Income
+│       ├── DuPont (2)               DuPont ROE, DuPont Check
+│       ├── Common Size (1)          Common Size %
+│       └── Helpers (2)              Revenue / Net Income Standalone Quarter (hidden)
+└── Pages
+    ├── 00 Cover (16)
+    ├── 01 Financial Position (17)
+    ├── 02 Liquidity (16)
+    ├── 03 Debt & Net Cash (10)
+    ├── 04 Notes & Evidence (24)
+    └── 05 Financial Statements (46)
+```
+
+Page folders follow the six HTML routes in the report prompt. Mapping starts from `reconciliation.csv` / `RECONCILIATION.md` and is completed with measures the report pages will need (for example `[Period Label]` on every page, liquidity ratios on Liquidity, DuPont on Notes & Evidence). Thirteen helper or growth measures have a Category folder only and no Pages folder: the four averages, `[Period Days]`, the two standalone-quarter helpers, Revenue/Net Income QoQ change and %, and the two CAGRs.
 
 All period-based measures use the **single latest `period_end` in filter context** with `is_latest_filing = TRUE()`. Balance-sheet amounts are point-in-time. Income and cash-flow amounts are duration totals for that one period (not a sum of quarters). Time intelligence uses `Date[fiscal_year]`, `Date[fiscal_quarter]`, and `is_fiscal_quarter_end` — not `SAMEPERIODLASTYEAR` or `DATEADD` on calendar months (NVIDIA is a 52/53-week fiscal calendar ending the last Sunday of January).
 
