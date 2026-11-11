@@ -3,7 +3,7 @@
 // Display folder: 02-kpi
 // Format: #,##0
 // Hidden: false
-// Point-in-time MarketableSecuritiesCurrent at the latest period_end. NVIDIA stopped tagging this concept from the FY2026 10-K (last value Q3 FY2026, 2025-10-26), so it is BLANK from FY2026 on — companyfacts has no replacement us-gaap concept.
+// Point-in-time current marketable securities at the latest period_end. Uses MarketableSecuritiesCurrent when present (through Q3 FY2026). Otherwise DebtSecuritiesCurrent + EquitySecuritiesFvNi at the same period_end, from the latest filing that tags them. The FY2026 10-K has neither total; FY2026 close comes from a later 10-Q comparative. Does not add EquitySecuritiesFVNINoncurrent, and does not add the fallback tags when MarketableSecuritiesCurrent is present.
 
 Marketable Securities =
 VAR _end =
@@ -11,10 +11,40 @@ VAR _end =
         MAX('Balance Sheet'[period_end]),
         'Balance Sheet'[is_latest_filing] = TRUE()
     )
+VAR _msc =
+    CALCULATE(
+        SUM('Balance Sheet'[value_usd]),
+        'Balance Sheet'[concept] = "MarketableSecuritiesCurrent",
+        'Balance Sheet'[is_latest_filing] = TRUE(),
+        'Balance Sheet'[period_end] = _end
+    )
+VAR _debt_filed =
+    CALCULATE(
+        MAX('Balance Sheet'[filed]),
+        'Balance Sheet'[concept] = "DebtSecuritiesCurrent",
+        'Balance Sheet'[period_end] = _end
+    )
+VAR _eq_filed =
+    CALCULATE(
+        MAX('Balance Sheet'[filed]),
+        'Balance Sheet'[concept] = "EquitySecuritiesFvNi",
+        'Balance Sheet'[period_end] = _end
+    )
+VAR _debt =
+    CALCULATE(
+        SUM('Balance Sheet'[value_usd]),
+        'Balance Sheet'[concept] = "DebtSecuritiesCurrent",
+        'Balance Sheet'[period_end] = _end,
+        'Balance Sheet'[filed] = _debt_filed
+    )
+VAR _eq =
+    CALCULATE(
+        SUM('Balance Sheet'[value_usd]),
+        'Balance Sheet'[concept] = "EquitySecuritiesFvNi",
+        'Balance Sheet'[period_end] = _end,
+        'Balance Sheet'[filed] = _eq_filed
+    )
+VAR _fallback =
+    IF(ISBLANK(_debt) && ISBLANK(_eq), BLANK(), COALESCE(_debt, 0) + COALESCE(_eq, 0))
 RETURN
-CALCULATE(
-    SUM('Balance Sheet'[value_usd]),
-    'Balance Sheet'[concept] = "MarketableSecuritiesCurrent",
-    'Balance Sheet'[is_latest_filing] = TRUE(),
-    'Balance Sheet'[period_end] = _end
-)
+IF(NOT ISBLANK(_msc), _msc, _fallback)

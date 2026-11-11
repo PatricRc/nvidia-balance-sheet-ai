@@ -464,7 +464,7 @@ CALCULATE(
 // Display folder: 02-kpi
 // Format: #,##0
 // Hidden: false
-// Point-in-time MarketableSecuritiesCurrent at the latest period_end. NVIDIA stopped tagging this concept from the FY2026 10-K (last value Q3 FY2026, 2025-10-26), so it is BLANK from FY2026 on — companyfacts has no replacement us-gaap concept.
+// Point-in-time current marketable securities at the latest period_end. Uses MarketableSecuritiesCurrent when present (through Q3 FY2026). Otherwise DebtSecuritiesCurrent + EquitySecuritiesFvNi at the same period_end, from the latest filing that tags them. The FY2026 10-K has neither total; FY2026 close comes from a later 10-Q comparative. Does not add EquitySecuritiesFVNINoncurrent, and does not add the fallback tags when MarketableSecuritiesCurrent is present.
 
 Marketable Securities =
 VAR _end =
@@ -472,13 +472,43 @@ VAR _end =
         MAX('Balance Sheet'[period_end]),
         'Balance Sheet'[is_latest_filing] = TRUE()
     )
+VAR _msc =
+    CALCULATE(
+        SUM('Balance Sheet'[value_usd]),
+        'Balance Sheet'[concept] = "MarketableSecuritiesCurrent",
+        'Balance Sheet'[is_latest_filing] = TRUE(),
+        'Balance Sheet'[period_end] = _end
+    )
+VAR _debt_filed =
+    CALCULATE(
+        MAX('Balance Sheet'[filed]),
+        'Balance Sheet'[concept] = "DebtSecuritiesCurrent",
+        'Balance Sheet'[period_end] = _end
+    )
+VAR _eq_filed =
+    CALCULATE(
+        MAX('Balance Sheet'[filed]),
+        'Balance Sheet'[concept] = "EquitySecuritiesFvNi",
+        'Balance Sheet'[period_end] = _end
+    )
+VAR _debt =
+    CALCULATE(
+        SUM('Balance Sheet'[value_usd]),
+        'Balance Sheet'[concept] = "DebtSecuritiesCurrent",
+        'Balance Sheet'[period_end] = _end,
+        'Balance Sheet'[filed] = _debt_filed
+    )
+VAR _eq =
+    CALCULATE(
+        SUM('Balance Sheet'[value_usd]),
+        'Balance Sheet'[concept] = "EquitySecuritiesFvNi",
+        'Balance Sheet'[period_end] = _end,
+        'Balance Sheet'[filed] = _eq_filed
+    )
+VAR _fallback =
+    IF(ISBLANK(_debt) && ISBLANK(_eq), BLANK(), COALESCE(_debt, 0) + COALESCE(_eq, 0))
 RETURN
-CALCULATE(
-    SUM('Balance Sheet'[value_usd]),
-    'Balance Sheet'[concept] = "MarketableSecuritiesCurrent",
-    'Balance Sheet'[is_latest_filing] = TRUE(),
-    'Balance Sheet'[period_end] = _end
-)
+IF(NOT ISBLANK(_msc), _msc, _fallback)
 
 // R&D Expense
 // Table: Balance Sheet
@@ -666,7 +696,7 @@ CALCULATE(
 // Display folder: 02-kpi
 // Format: #,##0
 // Hidden: false
-// Cash & equivalents + current Marketable Securities − Gross Debt (leases excluded). BLANK when Marketable Securities is not tagged (FY2026 onward) so the figure is never understated; use [Net Cash (Cash Only)] as the conservative fallback.
+// Cash & equivalents + current Marketable Securities − Gross Debt (leases excluded). Follows [Marketable Securities] (MarketableSecuritiesCurrent, else DebtSecuritiesCurrent + EquitySecuritiesFvNi). BLANK only if Cash or Marketable Securities is BLANK; use [Net Cash (Cash Only)] when you want to exclude securities.
 
 Net Cash =
 VAR _ms = [Marketable Securities]
@@ -965,7 +995,7 @@ DIVIDE([Current Assets], [Current Liabilities])
 // Display folder: 03-ratios
 // Format: 0.00
 // Hidden: false
-// (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. BLANK when Marketable Securities is not tagged (FY2026 onward) — treating it as 0 would understate NVIDIA's liquidity by tens of billions.
+// (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. Follows [Marketable Securities]. BLANK when that measure is BLANK so a missing securities tag is never treated as 0.
 
 Quick Ratio =
 VAR _ms = [Marketable Securities]

@@ -3,7 +3,7 @@
 // Display folder: 02-kpi
 // Format: #,##0
 // Hidden: false
-// Cash & equivalents + current Marketable Securities − Gross Debt (leases excluded). BLANK when Marketable Securities is not tagged (FY2026 onward) so the figure is never understated; use [Net Cash (Cash Only)] as the conservative fallback.
+// Cash & equivalents + current Marketable Securities − Gross Debt (leases excluded). Follows [Marketable Securities] (MarketableSecuritiesCurrent, else DebtSecuritiesCurrent + EquitySecuritiesFvNi). BLANK only if Cash or Marketable Securities is BLANK; use [Net Cash (Cash Only)] when you want to exclude securities.
 
 Net Cash =
 VAR _ms = [Marketable Securities]

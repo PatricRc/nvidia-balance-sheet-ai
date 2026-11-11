@@ -3,7 +3,7 @@
 // Display folder: 03-ratios
 // Format: 0.00
 // Hidden: false
-// (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. BLANK when Marketable Securities is not tagged (FY2026 onward) — treating it as 0 would understate NVIDIA's liquidity by tens of billions.
+// (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. Follows [Marketable Securities]. BLANK when that measure is BLANK so a missing securities tag is never treated as 0.
 
 Quick Ratio =
 VAR _ms = [Marketable Securities]
