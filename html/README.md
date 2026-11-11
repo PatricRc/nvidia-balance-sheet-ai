@@ -1,5 +1,3 @@
-# html/
+# Report design tokens
 
-Shared design tokens for HTML components (KPI cards, insight panels), same role as `html/tokens.css` in `trading-analytics-fabric`.
-
-**Day 1:** placeholder. `tokens.css` will be generated from a single Python token dict in `scripts/` once design starts so HTML, SVG and Power BI theme stay aligned.
+[`tokens.css`](tokens.css) defines the design system for the local prototype, including color roles, fonts, spacing, and focus. See the [design system](../design/design-system.md) for component states and the future theme mapping.

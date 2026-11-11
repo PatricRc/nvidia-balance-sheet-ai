@@ -1,0 +1,99 @@
+// DESIGN DRAFT. Query-scoped definitions for a later model review.
+// Format numeric balance measures as USD and coverage as a multiple.
+DEFINE
+    MEASURE 'Balance Sheet'[Ledger Period End] =
+        IF(
+            SELECTEDVALUE('Date'[is_fiscal_quarter_end], FALSE()),
+            SELECTEDVALUE('Date'[date])
+        )
+
+    MEASURE 'Balance Sheet'[Ledger Prior FY End] =
+        VAR SelectedDate = [Ledger Period End]
+        VAR FiscalYear = SELECTEDVALUE('Date'[fiscal_year])
+        RETURN
+            IF(
+                NOT ISBLANK(SelectedDate) && NOT ISBLANK(FiscalYear),
+                CALCULATE(
+                    MAX('Date'[date]),
+                    REMOVEFILTERS('Date'),
+                    'Date'[fiscal_year] = FiscalYear - 1,
+                    'Date'[is_fiscal_quarter_end] = TRUE()
+                )
+            )
+
+    MEASURE 'Balance Sheet'[Ledger Identity Residual] =
+        VAR Assets = [Total Assets]
+        VAR Liabilities = [Total Liabilities]
+        VAR Equity = [Total Equity]
+        RETURN
+            IF(
+                NOT (ISBLANK([Ledger Period End]) || ISBLANK(Assets) ||
+                     ISBLANK(Liabilities) || ISBLANK(Equity)),
+                Assets - Liabilities - Equity
+            )
+
+    MEASURE 'Balance Sheet'[Ledger Assets Change Since Prior Close] =
+        VAR CurrentAssets = [Total Assets]
+        VAR CompareDate = [Ledger Prior FY End]
+        VAR PriorAssets =
+            CALCULATE(
+                [Total Assets],
+                REMOVEFILTERS('Date'),
+                'Date'[date] = CompareDate
+            )
+        RETURN
+            IF(
+                NOT (ISBLANK(CompareDate) || ISBLANK(CurrentAssets) || ISBLANK(PriorAssets)),
+                CurrentAssets - PriorAssets
+            )
+
+    MEASURE 'Balance Sheet'[Ledger Equity Share] =
+        VAR Equity = [Total Equity]
+        RETURN
+            IF(NOT ISBLANK([Ledger Identity Residual]), DIVIDE(Equity, [Total Assets]))
+
+    MEASURE 'Balance Sheet'[Ledger Working Capital] =
+        VAR CurrentAssets = [Current Assets]
+        VAR CurrentLiabilities = [Current Liabilities]
+        RETURN
+            IF(
+                NOT (ISBLANK([Ledger Period End]) || ISBLANK(CurrentAssets) || ISBLANK(CurrentLiabilities)),
+                CurrentAssets - CurrentLiabilities
+            )
+
+    MEASURE 'Balance Sheet'[Ledger Cash Coverage] =
+        VAR Cash = [Cash]
+        RETURN
+            IF(NOT (ISBLANK([Ledger Period End]) || ISBLANK(Cash)), DIVIDE(Cash, [Current Liabilities]))
+
+    MEASURE 'Balance Sheet'[Ledger Snapshot Alt Text] =
+        VAR PeriodEnd = [Ledger Period End]
+        VAR Residual = [Ledger Identity Residual]
+        VAR Assets = [Total Assets]
+        VAR Liabilities = [Total Liabilities]
+        VAR Equity = [Total Equity]
+        RETURN
+            SWITCH(
+                TRUE(),
+                ISBLANK(PeriodEnd), "Select one fiscal period.",
+                ISBLANK(Residual), "Balance-sheet values are unavailable for the selected date.",
+                FORMAT(PeriodEnd, "mmm d, yyyy") &
+                ". Assets " & FORMAT(Assets / 1E9, "0.00") &
+                " billion US dollars. Liabilities " & FORMAT(Liabilities / 1E9, "0.00") &
+                " billion. Equity " & FORMAT(Equity / 1E9, "0.00") & " billion."
+            )
+
+EVALUATE
+    CALCULATETABLE(
+        ROW(
+            "Assets", [Total Assets],
+            "Identity residual", [Ledger Identity Residual],
+            "Prior fiscal year end", [Ledger Prior FY End],
+            "Change since prior fiscal close", [Ledger Assets Change Since Prior Close],
+            "Equity share", [Ledger Equity Share],
+            "Working capital", [Ledger Working Capital],
+            "Cash coverage", [Ledger Cash Coverage],
+            "Alt text", [Ledger Snapshot Alt Text]
+        ),
+        'Date'[date] = DATE(2026, 1, 25)
+    )

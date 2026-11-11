@@ -1,0 +1,26 @@
+// DESIGN DRAFT. Optional Image URL display measure for Snapshot.
+// Prefer a native stacked bar when users need interaction or export.
+// Keep the exact-value table and Ledger Snapshot Alt Text alongside this image.
+// Depends on the query-scoped draft measures in ledger-measures.dax.
+
+Ledger Funding Share SVG =
+VAR EquityShare = [Ledger Equity Share]
+VAR Residual = [Ledger Identity Residual]
+VAR Liabilities = [Total Liabilities]
+VAR Equity = [Total Equity]
+VAR ValidShare =
+    NOT (ISBLANK(EquityShare) || ISBLANK(Residual)) &&
+    ABS(Residual) <= 1 && Liabilities >= 0 && Equity >= 0 &&
+    EquityShare >= 0 && EquityShare <= 1
+VAR EquityWidth = FORMAT(320 * EquityShare, "0.000", "en-US")
+VAR LiabilityWidth = FORMAT(320 * (1 - EquityShare), "0.000", "en-US")
+RETURN
+    IF(
+        ValidShare,
+        "data:image/svg+xml;utf8," &
+        "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 16'>" &
+        "<rect width='" & LiabilityWidth & "' height='16' fill='%23496052'/>" &
+        "<rect x='" & LiabilityWidth & "' width='" & EquityWidth &
+        "' height='16' fill='%23CBE66D'/>" &
+        "</svg>"
+    )

@@ -1,0 +1,43 @@
+// DESIGN DRAFT. Requires the approved inputs below from future gold/model work.
+// [Ledger Reported Current Debt] must be BLANK when absent, 0 only for verified zero.
+// [Ledger Verified Current Marketable Securities] must reconcile to the complete
+// filing amount without combining a consolidated line with its components.
+// [Ledger Approved Note Count] must be scoped to the current period and approval state.
+
+Ledger Debt Carrying Amount =
+VAR CurrentDebt = [Ledger Reported Current Debt]
+VAR NoncurrentDebt = [Long-Term Debt]
+RETURN
+    IF(
+        NOT (ISBLANK([Ledger Period End]) || ISBLANK(CurrentDebt) || ISBLANK(NoncurrentDebt)),
+        CurrentDebt + NoncurrentDebt
+    )
+
+Ledger Cash-Only Net Cash =
+VAR Cash = [Cash]
+VAR Debt = [Ledger Debt Carrying Amount]
+RETURN
+    IF(NOT (ISBLANK(Cash) || ISBLANK(Debt)), Cash - Debt)
+
+Ledger Securities-Inclusive Net Position =
+VAR CashOnlyNetCash = [Ledger Cash-Only Net Cash]
+VAR Securities = [Ledger Verified Current Marketable Securities]
+RETURN
+    IF(NOT (ISBLANK(CashOnlyNetCash) || ISBLANK(Securities)), CashOnlyNetCash + Securities)
+
+Ledger Strict Quick Ratio =
+VAR Cash = [Cash]
+VAR Securities = [Ledger Verified Current Marketable Securities]
+VAR Receivables = [Accounts Receivable]
+RETURN
+    IF(
+        NOT (ISBLANK([Ledger Period End]) || ISBLANK(Cash) || ISBLANK(Securities) || ISBLANK(Receivables)),
+        DIVIDE(Cash + Securities + Receivables, [Current Liabilities])
+    )
+
+Ledger AI Note Status =
+IF(
+    ISBLANK([Ledger Period End]),
+    "Select one fiscal period.",
+    IF([Ledger Approved Note Count] > 0, "Reviewed notes available", "No reviewed AI notes")
+)
