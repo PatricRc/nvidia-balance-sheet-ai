@@ -7,7 +7,7 @@ Fabric notebook sources for `NVIDIA-BalanceSheet-AI` / lakehouse `NVIDIALakehous
 | **`nb_bronze_silver_gold_sec_edgar.ipynb`** | End-to-end: SEC pull → bronze JSON → `silver.financial_fact` → `gold.balance_sheet` / `income_statement` / `cash_flow` + dims | **Implemented** — import into Fabric, attach `NVIDIALakehouse`, Run all |
 | **`nb_measures_financial.ipynb`** | KPI, ratio, and analysis measures on **NVIDIA Financials**, hosted on `_Measures` with Category/Pages folders, validated vs gold; final cell asserts 84 measures on that table | **Implemented** — Python kernel, attach `NVIDIALakehouse`, Run all after the semantic model exists |
 | **`nb_semantic_model.ipynb`** | Direct Lake model **NVIDIA Financials**: tables, relationships, date table, calculated `_Measures` table, 01-base measures, FY2026 assert | **Implemented** — import, attach `NVIDIALakehouse`, kernel **Python**, Run all |
-| **`nb_build_import_model.ipynb`** | Import copy **NVIDIA Financials Public** + report clone for Publish to web; `MODE` = `build` / `refresh`, checks vs the Direct Lake model | **Implemented** — Python kernel, attach `NVIDIALakehouse`; see `docs/how-to-publish-public-dashboard.md` |
+| **`nb_build_import_model.ipynb`** | Import copy **NVIDIA Financials Public** + report clone for Publish to web; `MODE` = `build` / `refresh` / `fix_report` (promotes report-level measures, rebinds the public report), checks vs the Direct Lake model | **Implemented** — Python kernel, attach `NVIDIALakehouse`; see `docs/how-to-publish-public-dashboard.md` |
 | **`nb_gold_dim_date.ipynb`** | Contiguous `gold.dim_date` (calendar + NVIDIA fiscal calendar) for Direct Lake | **Implemented** — run after gold statements exist |
 | `nb_bronze_sec_edgar.py` | Stub pointer (logic lives in the .ipynb) | Pointer |
 | `nb_silver_financial_fact.py` | Stub pointer | Pointer |
@@ -23,7 +23,7 @@ Fabric notebook sources for `NVIDIA-BalanceSheet-AI` / lakehouse `NVIDIALakehous
 5. Import/open **`nb_gold_dim_date.ipynb`**, attach the same lakehouse, Run all → `gold.dim_date` (re-run after a gold type change so the period_end checks still pass).
 6. Import/open **`nb_semantic_model.ipynb`**, attach the same lakehouse, set kernel to **Python** (not PySpark), Run all → semantic model `NVIDIA Financials`. Requires XMLA read/write on the capacity. Run this only after gold date types are in place.
 7. Import/open **`nb_measures_financial.ipynb`**, attach the same lakehouse, kernel **Python**, Run all → KPI/ratio/analysis measures. Requires the **NVIDIA Financials** model and XMLA read/write. Last cell must print OVERALL: PASS.
-8. Public copy: **`nb_build_import_model.ipynb`** with `MODE = "build"`, map the OAuth connection, then `MODE = "refresh"` (also the last activity of `pl_nvidia_sec_refresh`). Steps in `docs/how-to-publish-public-dashboard.md`.
+8. Public copy: **`nb_build_import_model.ipynb`** with `MODE = "build"`, map the OAuth connection, run `MODE = "refresh"`, then run `MODE = "fix_report"` once. `MODE = "refresh"` is also the last activity of `pl_nvidia_sec_refresh`. Steps in `docs/how-to-publish-public-dashboard.md`.
 
 ## Tables produced
 

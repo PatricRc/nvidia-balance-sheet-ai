@@ -14,7 +14,8 @@ Publish to web won't publish a report on a Direct Lake model: Direct Lake reads 
 2. The same run clones the report onto the copy with the Power BI REST `Reports/Clone` API (`targetModelId`): `NVIDIA-financial-report - Public`.
 3. The copy's SQL data source is mapped to an **OAuth 2.0 cloud connection** to the lakehouse SQL endpoint instead of *Default: Single Sign-On* (SSO can't refresh and also blocks Publish to web).
 4. `MODE = "refresh"`: full refresh, then the anchors (FY2026 Marketable Securities 51,951M, Net Cash 54,088M) and a check that all 84 measures return the same FY2026 values as the Direct Lake model.
-5. File → Embed report → Publish to web (public).
+5. `MODE = "fix_report"`: the clone kept two things Publish to web refuses. Its `definition.pbir` still pointed at the Direct Lake model (Clone's `targetModelId` didn't take), and it carries report-level measures in `reportExtensions.json`. The notebook promotes those measures into `_Measures` of the Import model (folder `Report\Ledger`, saved to `dax/report-ledger-measures/`). It then removes every `"Schema": "extension"` reference from the visuals, pages and bookmarks, deletes `reportExtensions.json`, points the pbir at the Import model, saves with `updateDefinition`, calls Rebind and re-reads the definition to confirm: `FIX REPORT: PASS`.
+6. File → Embed report → Publish to web (public).
 
 ## Keeping it current (on demand, no schedule)
 SEC filings arrive quarterly, so nothing is scheduled. `pl_nvidia_sec_refresh` ends with a notebook activity **Refresh public model** that runs `nb_build_import_model` with `MODE = "refresh"` after the measures validation succeeds. The trading project used a scheduled refresh instead; this project doesn't.

@@ -21,9 +21,10 @@ Publish to web rejects a report whose model is Direct Lake, DirectQuery or a liv
 | Source model `NVIDIA Financials` (Direct Lake) | `28fb4dc4-d49a-4d2f-b561-85bd3a3a3a43` |
 | Source report | `NVIDIA-financial-report` |
 | Import model (created) | `NVIDIA Financials Public` |
-| Public report (created) | `NVIDIA-financial-report - Public` |
+| Import model id | `c7c8841c-142d-4848-8cd2-7fb1a6569f93` |
+| Public report (created) | `NVIDIA-financial-report - Public` (`5c47235e-7523-4cc5-95dd-d15683be11c4`) |
 
-Expected in both models: 7 tables (6 gold + `_Measures`), 9 relationships, 84 measures, all on `_Measures`.
+Expected in both models: 7 tables (6 gold + `_Measures`), 9 relationships, 84 shared measures on `_Measures`. After `fix_report` the Import model also has the promoted report measures (folder `Report\Ledger`), which the checks count separately.
 
 ## 3. Build the copy
 1. Import `fabric/notebooks/nb_build_import_model.ipynb` into the workspace.
@@ -43,6 +44,16 @@ An agent can't complete the popup: ask Patricio and wait.
 ## 5. Refresh and verify
 Set `MODE = "refresh"` and Run all. Expect `SQL endpoint metadata synced`, the refresh, `PASS anchor Marketable Securities FY2026: 51951000000`, `PASS anchor Net Cash FY2026: 54088000000`, `84/84 measures match the Direct Lake model` and `OVERALL: PASS`.
 
+## 5b. Fix the public report
+Publish to web is greyed out on the clone because of report-level measures in `definition/reportExtensions.json`, and a `definition.pbir` still bound to the Direct Lake model (`28fb4dc4-…`). A blank report on the Import model allows it, which isolates the cause. Set `MODE = "fix_report"` and Run all. Expect:
+- `NVIDIA-financial-report - Public: <n> parts, <m> report-level measures`
+- `saved definitions to /lakehouse/default/Files/exports/report-ledger-measures.json`. Download it for `dax/report-ledger-measures/`.
+- `measures added <m>, already there 0`
+- `updateDefinition: …, <k> extension references removed, pbir -> c7c8841c-142d-4848-8cd2-7fb1a6569f93`
+- `promoted measures evaluating without error: m/m` and `FIX REPORT: PASS`
+
+If it stops with `name clash`, nothing was changed: report the names. Rerunning is safe (expect `0 report-level measures`, then PASS). Then rerun `MODE = "refresh"`: expect `84/84` shared measures and the promoted-measure line, then `OVERALL: PASS`.
+
 ## 6. Check the public report
 Open `NVIDIA-financial-report - Public`. Every page should show values with no broken visuals. Fix only this copy. If a visual is broken, rebind it: select it → Visualizations → remove the field → pick the same measure from `_Measures`.
 
@@ -61,6 +72,7 @@ Add to `pl_nvidia_sec_refresh` a final Notebook activity `Refresh public model` 
 ## 9. Verification checklist
 - [ ] `STRUCTURE CHECK: PASS` (same tables, relationships, measures, folders).
 - [ ] `OVERALL: PASS` after refresh.
+- [ ] `FIX REPORT: PASS`: no `reportExtensions.json`, no extension references, pbir on `c7c8841c-…`.
 - [ ] The public report's dataset is `NVIDIA Financials Public` (report → Settings, or `fabric.list_reports`).
 - [ ] Every visual shows values.
 - [ ] Patricio approved publishing.
