@@ -9,3 +9,9 @@ secrets*
 *.pbix
 *.pbit
 node_modules/
+
+# chatbot visual build output
+chatbot/visual/.tmp/
+chatbot/visual/dist/
+chatbot/visual/webpack.statistics.*.html
+.pytest_cache/

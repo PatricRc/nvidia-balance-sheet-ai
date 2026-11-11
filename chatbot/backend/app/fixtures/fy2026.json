@@ -1,0 +1,239 @@
+{
+ "_comment": "Offline demo data (POWERBI_MODE=fixture). Values are FY2026 SEC EDGAR companyfacts as loaded by the gold notebook; marker -> rows. Not a substitute for the live model.",
+ "ROW(\"request\", \"FY2026\"": [
+  {
+   "request": "FY2026",
+   "Period Label": "FY2026 \u00b7 ended 2026-01-25",
+   "Total Assets": 206803000000.0,
+   "Total Liabilities": 49510000000.0,
+   "Total Equity": 157293000000.0,
+   "Cash": 10605000000.0,
+   "Long-Term Debt": 7469000000.0,
+   "Long-Term Debt Current": 999000000.0,
+   "Gross Debt": 8468000000.0,
+   "Net Cash (Cash Only)": 2137000000.0,
+   "Net Cash": null,
+   "Current Assets": 125605000000.0,
+   "Current Liabilities": 32163000000.0,
+   "Working Capital": 93442000000.0,
+   "Current Ratio": 3.905263812455306,
+   "Quick Ratio": null,
+   "Revenue": 215938000000.0,
+   "Net Income": 120067000000.0,
+   "Gross Profit": 153463000000.0,
+   "Operating Income": 130387000000.0,
+   "Gross Margin %": 0.7106808435754708,
+   "Operating Margin %": 0.6038168363141272,
+   "Net Margin %": 0.5560253406070261,
+   "Revenue YoY %": 0.654735357900948,
+   "Debt to Equity": 0.047484630593859864,
+   "ROE": 1.014850815653791,
+   "ROA": 0.7541802238665344,
+   "Total Assets YoY %": 0.8530568722502486
+  }
+ ],
+ "ROW(\"request\", \"latest\"": [
+  {
+   "request": "latest",
+   "Period Label": "FY2026 \u00b7 ended 2026-01-25",
+   "Total Assets": 206803000000.0,
+   "Total Liabilities": 49510000000.0,
+   "Total Equity": 157293000000.0,
+   "Cash": 10605000000.0,
+   "Long-Term Debt": 7469000000.0,
+   "Long-Term Debt Current": 999000000.0,
+   "Gross Debt": 8468000000.0,
+   "Net Cash (Cash Only)": 2137000000.0,
+   "Net Cash": null,
+   "Current Assets": 125605000000.0,
+   "Current Liabilities": 32163000000.0,
+   "Working Capital": 93442000000.0,
+   "Current Ratio": 3.905263812455306,
+   "Quick Ratio": null,
+   "Revenue": 215938000000.0,
+   "Net Income": 120067000000.0,
+   "Gross Profit": 153463000000.0,
+   "Operating Income": 130387000000.0,
+   "Gross Margin %": 0.7106808435754708,
+   "Operating Margin %": 0.6038168363141272,
+   "Net Margin %": 0.5560253406070261,
+   "Revenue YoY %": 0.654735357900948,
+   "Debt to Equity": 0.047484630593859864,
+   "ROE": 1.014850815653791,
+   "ROA": 0.7541802238665344,
+   "Total Assets YoY %": 0.8530568722502486
+  }
+ ],
+ "\"value\", [Revenue]": [
+  {
+   "fiscal_year": 2025,
+   "fiscal_quarter": 1,
+   "value": 26044000000.0,
+   "Period Label": "Q1 FY2025"
+  },
+  {
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "value": 30040000000.0,
+   "Period Label": "Q2 FY2025"
+  },
+  {
+   "fiscal_year": 2025,
+   "fiscal_quarter": 3,
+   "value": 35082000000.0,
+   "Period Label": "Q3 FY2025"
+  },
+  {
+   "fiscal_year": 2025,
+   "fiscal_quarter": 4,
+   "value": 39331000000.0,
+   "Period Label": "FY2025"
+  },
+  {
+   "fiscal_year": 2026,
+   "fiscal_quarter": 1,
+   "value": 44062000000.0,
+   "Period Label": "Q1 FY2026"
+  },
+  {
+   "fiscal_year": 2026,
+   "fiscal_quarter": 2,
+   "value": 46743000000.0,
+   "Period Label": "Q2 FY2026"
+  },
+  {
+   "fiscal_year": 2026,
+   "fiscal_quarter": 3,
+   "value": 57006000000.0,
+   "Period Label": "Q3 FY2026"
+  },
+  {
+   "fiscal_year": 2026,
+   "fiscal_quarter": 4,
+   "value": 68127000000.0,
+   "Period Label": "FY2026"
+  },
+  {
+   "fiscal_year": 2027,
+   "fiscal_quarter": 1,
+   "value": 81615000000.0,
+   "Period Label": "Q1 FY2027"
+  },
+  {
+   "fiscal_year": 2027,
+   "fiscal_quarter": 2,
+   "value": 96221000000.0,
+   "Period Label": "Q2 FY2027"
+  }
+ ],
+ "[is_latest_filing] = TRUE() && ": [
+  {
+   "statement": "balance_sheet",
+   "concept": "Assets",
+   "line_item": "Total Assets",
+   "period_end": "2026-01-25T00:00:00",
+   "value_usd": 206803000000.0,
+   "unit": "USD",
+   "form": "10-K",
+   "accn": "0001045810-26-000021",
+   "filed": "2026-02-25T00:00:00",
+   "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/"
+  },
+  {
+   "statement": "balance_sheet",
+   "concept": "CashAndCashEquivalentsAtCarryingValue",
+   "line_item": "Cash & Equivalents",
+   "period_end": "2026-01-25T00:00:00",
+   "value_usd": 10605000000.0,
+   "unit": "USD",
+   "form": "10-K",
+   "accn": "0001045810-26-000021",
+   "filed": "2026-02-25T00:00:00",
+   "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/"
+  },
+  {
+   "statement": "balance_sheet",
+   "concept": "Liabilities",
+   "line_item": "Total Liabilities",
+   "period_end": "2026-01-25T00:00:00",
+   "value_usd": 49510000000.0,
+   "unit": "USD",
+   "form": "10-K",
+   "accn": "0001045810-26-000021",
+   "filed": "2026-02-25T00:00:00",
+   "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/"
+  },
+  {
+   "statement": "balance_sheet",
+   "concept": "LongTermDebtCurrent",
+   "line_item": "Long-Term Debt (Current Portion)",
+   "period_end": "2026-01-25T00:00:00",
+   "value_usd": 999000000.0,
+   "unit": "USD",
+   "form": "10-K",
+   "accn": "0001045810-26-000021",
+   "filed": "2026-02-25T00:00:00",
+   "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/"
+  },
+  {
+   "statement": "balance_sheet",
+   "concept": "LongTermDebtNoncurrent",
+   "line_item": "Long-Term Debt (Noncurrent)",
+   "period_end": "2026-01-25T00:00:00",
+   "value_usd": 7469000000.0,
+   "unit": "USD",
+   "form": "10-K",
+   "accn": "0001045810-26-000021",
+   "filed": "2026-02-25T00:00:00",
+   "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/"
+  },
+  {
+   "statement": "balance_sheet",
+   "concept": "StockholdersEquity",
+   "line_item": "Stockholders' Equity",
+   "period_end": "2026-01-25T00:00:00",
+   "value_usd": 157293000000.0,
+   "unit": "USD",
+   "form": "10-K",
+   "accn": "0001045810-26-000021",
+   "filed": "2026-02-25T00:00:00",
+   "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/"
+  },
+  {
+   "statement": "income_statement",
+   "concept": "NetIncomeLoss",
+   "line_item": "Net Income (Loss)",
+   "period_end": "2026-01-25T00:00:00",
+   "value_usd": 120067000000.0,
+   "unit": "USD",
+   "form": "10-K",
+   "accn": "0001045810-26-000021",
+   "filed": "2026-02-25T00:00:00",
+   "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/"
+  },
+  {
+   "statement": "income_statement",
+   "concept": "Revenues",
+   "line_item": "Revenue",
+   "period_end": "2026-01-25T00:00:00",
+   "value_usd": 215938000000.0,
+   "unit": "USD",
+   "form": "10-K",
+   "accn": "0001045810-26-000021",
+   "filed": "2026-02-25T00:00:00",
+   "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/"
+  },
+  {
+   "statement": "cash_flow",
+   "concept": "NetCashProvidedByUsedInOperatingActivities",
+   "line_item": "Cash from Operating Activities",
+   "period_end": "2026-01-25T00:00:00",
+   "value_usd": 102718000000.0,
+   "unit": "USD",
+   "form": "10-K",
+   "accn": "0001045810-26-000021",
+   "filed": "2026-02-25T00:00:00",
+   "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/"
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+{
+  "visual": {
+    "name": "nvidiaAnalystChat",
+    "displayName": "NVIDIA Analyst Chat",
+    "guid": "nvidiaAnalystChat8F3C1E2A9B7D4C6E",
+    "visualClassName": "Visual",
+    "version": "1.0.0.0",
+    "description": "Ask questions about NVIDIA's balance sheet. Answers come from the NVIDIA Financials semantic model via a Claude-powered backend, with SEC evidence.",
+    "supportUrl": "https://github.com/PatricRc/nvidia-balance-sheet-ai",
+    "gitHubUrl": "https://github.com/PatricRc/nvidia-balance-sheet-ai"
+  },
+  "apiVersion": "5.11.0",
+  "author": { "name": "DataPat.ai", "email": "noreply@example.com" },
+  "assets": { "icon": "assets/icon.png" },
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "dependencies": null,
+  "stringResources": [],
+  "version": "1.0.0.0"
+}

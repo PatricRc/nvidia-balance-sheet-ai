@@ -1,0 +1,29 @@
+{
+  "privileges": [
+    {
+      "name": "WebAccess",
+      "essential": true,
+      "parameters": ["https://*.azurecontainerapps.io"]
+    }
+  ],
+  "dataRoles": [
+    { "name": "fiscalYear", "displayName": "Fiscal year (optional)", "kind": "Grouping",
+      "description": "Drop Date[fiscal_year] here so answers follow the report's fiscal-year slicer" },
+    { "name": "fiscalQuarter", "displayName": "Fiscal quarter (optional)", "kind": "Grouping",
+      "description": "Drop Date[fiscal_quarter] here so answers follow the report's quarter slicer" }
+  ],
+  "dataViewMappings": [
+    {
+      "conditions": [{ "fiscalYear": { "max": 1 }, "fiscalQuarter": { "max": 1 } }],
+      "categorical": {
+        "categories": {
+          "select": [{ "bind": { "to": "fiscalYear" } }, { "bind": { "to": "fiscalQuarter" } }],
+          "dataReductionAlgorithm": { "top": { "count": 50 } }
+        }
+      }
+    }
+  ],
+  "supportsEmptyDataView": true,
+  "supportsLandingPage": false,
+  "supportsKeyboardFocus": true
+}

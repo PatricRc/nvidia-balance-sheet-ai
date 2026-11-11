@@ -4,7 +4,7 @@ A Microsoft Fabric + Power BI portfolio project: SEC EDGAR companyfacts land onc
 
 **Guiding question:** *How has NVIDIA's financial position changed?*
 
-> **Status: Gold tables + calendar + Direct Lake model + KPI/ratio/analysis measures ready.** After gold, `gold.dim_date`, and `nb_semantic_model.ipynb` have been run (model **NVIDIA Financials** exists), import `fabric/notebooks/nb_measures_financial.ipynb`, attach `NVIDIALakehouse`, kernel **Python**, Run all. Report pages, Publish to web, Claude batch, and chatbot are not built yet.
+> **Status: Gold tables + calendar + Direct Lake model + KPI/ratio/analysis measures ready.** After gold, `gold.dim_date`, and `nb_semantic_model.ipynb` have been run (model **NVIDIA Financials** exists), import `fabric/notebooks/nb_measures_financial.ipynb`, attach `NVIDIALakehouse`, kernel **Python**, Run all. The Claude analyst chatbot (RAG over the semantic model) is in `chatbot/` - see [chatbot/README.md](chatbot/README.md). Report pages, Publish to web and the Claude batch notes are not built yet.
 
 ## The story in four pages
 
@@ -47,7 +47,7 @@ gold.balance_sheet + gold.income_statement + gold.cash_flow
            reviewer · timestamp
 ```
 
-**Phase 2 (not started):** a separate HTML / FastAPI chatbot that reads the same gold tables, calls Claude server-side, and is linked from the report. The API key never appears in the repo, notebooks checked into git, DAX, the `.pbix`/PBIP, or any HTML.
+**Analyst chatbot (`chatbot/`, code ready, not deployed):** FastAPI service that answers questions with Claude using retrieval over the **NVIDIA Financials** semantic model (measure catalog + live DAX through the Power BI Execute Queries API + SEC evidence), with a number-level grounding check. It appears in the report as a custom visual, or as a standalone page next to the embedded report. The API key never appears in the repo, notebooks checked into git, DAX, the `.pbix`/PBIP, or any HTML.
 
 ## Data-correctness rules
 
@@ -98,14 +98,15 @@ dashboard/
 fabric/
   notebooks/     bronze SEC pull, silver flatten, gold BS + Claude batch
   semantic-model/ Direct Lake model notes
-scripts/         Python generators for DAX / HTML / SVG (later)
+scripts/         build_measures.py (dax/ -> notebooks sync); HTML / SVG generators later
+chatbot/         Claude analyst: FastAPI backend (RAG over the semantic model) + Power BI custom visual
 docs/            build guide, correctness rules, AI eval notes
 .env.example     placeholder names only — real secrets stay in Key Vault
 ```
 
 ## Tech
 
-Microsoft Fabric (Lakehouse, Notebooks, OneLake, Direct Lake) · Delta Lake · Python · Power BI · SEC EDGAR `data.sec.gov` · Claude Messages API (batch, server-side) · Azure Key Vault · (phase 2) FastAPI + HTML chatbot
+Microsoft Fabric (Lakehouse, Notebooks, OneLake, Direct Lake) · Delta Lake · Python · Power BI · SEC EDGAR `data.sec.gov` · Claude Messages API (batch, server-side) · Azure Key Vault · FastAPI + Power BI custom visual chatbot (Claude Opus 5.5, Execute Queries REST API)
 
 ## Roadmap
 
@@ -118,7 +119,7 @@ Microsoft Fabric (Lakehouse, Notebooks, OneLake, Direct Lake) · Delta Lake · P
 | Measures | `nb_measures_financial.ipynb` — 02-kpi / 03-ratios / 04-analysis, validated vs gold | **Notebook in repo; run in Fabric (Python kernel)** |
 | Next | First report page + Publish to web | Not started |
 | | Claude batch notebook → `gold.ai_insight` + page 4 | Not started |
-| | Phase 2 HTML/FastAPI chatbot linked from the report | Not started |
+| | Claude analyst chatbot: backend + custom visual (`chatbot/`) | **Code + tests in repo; deploy to Azure Container Apps** |
 | Later | Save as PBIP and commit TMDL + report JSON | Not started |
 | | Scheduled Fabric pipeline instead of manual Run all | Not started |
 
