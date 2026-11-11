@@ -34,7 +34,7 @@ Source accession `0001045810-26-000021`, filed `2026-02-25`, period end `2026-01
 
 ## Known gaps
 
-- `MarketableSecuritiesCurrent` last appears at Q3 FY2026 (2025-10-26); the FY2026 10-K and later 10-Qs no longer tag current marketable securities in us-gaap, so Quick Ratio and Net Cash are BLANK from FY2026 (Net Cash (Cash Only) is the fallback).
+- From the FY2026 10-K onward NVIDIA stopped tagging `MarketableSecuritiesCurrent` (last value: Q3 FY2026, 2025-10-26, 49,122 M). Later 10-Qs tag `DebtSecuritiesCurrent` + `EquitySecuritiesFvNi` instead; gold maps both, and `[Marketable Securities]` uses the old tag when present, otherwise the sum of those two at the same `period_end` (latest filing, so FY2026 close is the 10-Q comparative — the 10-K has no current-securities total). Do not add `EquitySecuritiesFVNINoncurrent` (noncurrent; 22,251 M at FY2026). Do not use `AvailableForSaleSecuritiesDebtSecurities` (39,520 M at FY2026, 455 M above `DebtSecuritiesCurrent`, and it includes cash equivalents). `EquitySecuritiesFvNi` is not labeled current in the taxonomy; NVIDIA presents it as the current marketable-equity companion to `DebtSecuritiesCurrent` from FY2026, and it overlapped `MarketableSecuritiesCurrent` in FY2022 (do not add the two).
 - `PaymentsOfDividendsCommonStock` is absent from NVIDIA companyfacts; gold uses `PaymentsOfDividends`.
 - `PaymentsToAcquirePropertyPlantAndEquipment` (CapEx) last appears in NVIDIA companyfacts around mid-FY2020; later periods (including FY2026) have no CapEx row, so Free Cash Flow is BLANK.
 - Recent annual revenue is tagged `Revenues`; older years may also have `RevenueFromContractWithCustomerExcludingAssessedTax` — both stay on `gold.dim_line_item`.

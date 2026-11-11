@@ -43,11 +43,11 @@ Cash-flow 10-Q figures with `duration_days > 100` are YTD (`[Cash Flow Is YTD]`)
 | `[Long-Term Debt Current]` | `LongTermDebtCurrent` (tagged from FY2020) |
 | `[Gross Debt]` | `[Long-Term Debt]` + `[Long-Term Debt Current]` (blank current portion = 0). Leases excluded. |
 | `[Operating Lease Liabilities]` | `OperatingLeaseLiabilityCurrent` + `OperatingLeaseLiabilityNoncurrent`, shown separately |
-| `[Net Cash]` | `[Cash]` + `[Marketable Securities]` − `[Gross Debt]`; **BLANK when Marketable Securities is not tagged** (FY2026 onward) |
+| `[Net Cash]` | `[Cash]` + `[Marketable Securities]` − `[Gross Debt]`. Follows `[Marketable Securities]`. |
 | `[Net Cash (Cash Only)]` | `[Cash]` − `[Gross Debt]` — conservative, always available; label it "cash only" |
 | `[Period Label]` | Text such as `Q2 FY2027 · ended 2026-07-26` for card subtitles |
 
-FY2026 check: Gross Debt = 7,469 + 999 = **$8,468M** (= us-gaap `LongTermDebt`); Net Cash (Cash Only) = 10,605 − 8,468 = **$2,137M**.
+FY2026 check: Gross Debt = 7,469 + 999 = **$8,468M** (= us-gaap `LongTermDebt`); Net Cash (Cash Only) = 10,605 − 8,468 = **$2,137M**; Marketable Securities = 39,065 + 12,886 = **$51,951M** (Q2 FY2027 10-Q comparative); Net Cash = 10,605 + 51,951 − 8,468 = **$54,088M**; Quick Ratio = (10,605 + 51,951 + 38,466) / 32,163 = **3.14**.
 
 ## Concepts used
 
