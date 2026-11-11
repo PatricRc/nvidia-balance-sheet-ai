@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Independent financial statement analysis of NVIDIA with SEC filing evidence.">
+  <title>NVIDIA — The Financial Ledger</title>
+  <link rel="icon" href="assets/folio.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../html/tokens.css">
+  <link rel="stylesheet" href="ledger.css">
+  <script src="filings.js" defer></script>
+  <script src="statements.js" defer></script>
+  <script src="ledger.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to report</a>
+  <div class="shell">
+    <aside class="rail">
+      <div class="masthead"><span class="eyebrow">DATAPAT.AI / RESEARCH</span><p>The Financial<br> Ledger</p><span class="rail-note">Company dossier · NVDA</span></div>
+      <nav aria-label="Report chapters">
+        <a href="#cover"><span>00</span> Cover</a>
+        <a href="#snapshot"><span>01</span> Financial Position</a>
+        <a href="#liquidity"><span>02</span> Liquidity</a>
+        <a href="#debt"><span>03</span> Debt &amp; Net Cash</a>
+        <a href="#evidence"><span>04</span> Notes &amp; Evidence</a>
+        <a href="#statements"><span>05</span> Financial Statements</a>
+      </nav>
+      <button id="help" class="rail-help" type="button">How to read <span aria-hidden="true">↗</span></button>
+      <p class="rail-note rail-footer">Independent portfolio study<br>Filing-backed design prototype</p>
+    </aside>
+    <main id="content" tabindex="-1">
+      <header class="topbar">
+        <span class="eyebrow">PUBLIC FILINGS <span aria-hidden="true">/</span> NVIDIA CORPORATION</span>
+        <div class="filters">
+          <label for="period">Fiscal period</label>
+          <select id="period">
+            <option value="q2">Q2 FY2027 · Jul 26, 2026</option>
+            <option value="fy">FY2026 · Jan 25, 2026</option>
+          </select>
+          <button id="reset" class="button secondary" type="button">Reset</button>
+        </div>
+      </header>
+      <p class="sr-only" role="status" id="announcement"></p>
+      <div id="page"></div>
+      <footer class="footer"><span>THE FINANCIAL LEDGER / NVDA</span><span>USD unless noted · SEC filing snapshots</span></footer>
+    </main>
+  </div>
+  <dialog id="guide" aria-labelledby="guide-title">
+    <div class="dialog-header"><p class="eyebrow">READING GUIDE</p><form method="dialog"><button class="button secondary" autofocus>Close</button></form></div>
+    <h2 id="guide-title">From statement to evidence</h2>
+    <ol>
+      <li>Choose a fiscal period. The statements identify whether each comparison is a reporting-date balance, quarter or year-to-date flow.</li>
+      <li>Read the chapter conclusion and check the amounts and units underneath.</li>
+      <li>Use Financial Statements to switch between the balance sheet, profit, cash flow, debt and liquidity. Open Notes &amp; Evidence to trace a claim.</li>
+    </ol>
+    <p>Balance sheets report amounts as of a date. Income and cash flow report activity over a period.</p>
+  </dialog>
+  <noscript>This local prototype requires JavaScript for chapter and period navigation.</noscript>
+</body>
+</html>

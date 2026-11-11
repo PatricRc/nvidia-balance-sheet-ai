@@ -1,11 +1,7 @@
-# dashboard/
+# Dashboard design
 
-HTML / SVG prototypes and screenshots of the four Power BI pages, mirroring the `trading-analytics-fabric` layout.
-
-| Path | Will hold |
-|---|---|
-| `html/` | Page prototypes (snapshot, liquidity, debt, AI notes) once design starts |
-| `svg/` | Chart components (BS stack, liquidity trend, debt/net-cash, insight cards) |
-| `screenshots/` | Rendered PNGs from Power BI / HTML once pages exist |
-
-**Day 1:** empty placeholders only. No live screenshots or figures yet.
+- [Open The Financial Ledger](html/index.html) in a browser for the six-chapter prototype.
+- [Design package](../design/README.md) explains the financial narrative, page layouts, design tokens, and DAX handoff.
+- [Source fixtures](html/SOURCES.md) identify each filing and comparison scope.
+- [Screenshots](screenshots/) show browser captures of the current prototype.
+- `svg/` is reserved for future reusable visualization assets. The current prototype uses HTML and CSS bars for its charts.

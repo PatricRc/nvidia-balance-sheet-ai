@@ -6,6 +6,10 @@ A Microsoft Fabric + Power BI portfolio project: SEC EDGAR companyfacts land onc
 
 > **Status: Gold tables + calendar + Direct Lake model + KPI/ratio/analysis measures ready.** After gold, `gold.dim_date`, and `nb_semantic_model.ipynb` have been run (model **NVIDIA Financials** exists), import `fabric/notebooks/nb_measures_financial.ipynb`, attach `NVIDIALakehouse`, kernel **Python**, Run all. Report pages, Publish to web, Claude batch, and chatbot are not built yet.
 
+## Design preview
+
+[The Financial Ledger design package](design/README.md) contains a local six-chapter HTML/CSS prototype, shared design tokens, filing-backed examples, and DAX drafts. Open [the prototype](dashboard/html/index.html) in a browser. This design phase is separate from the live Fabric and Power BI build.
+
 ## The story in four pages
 
 | Page | Question | What it will show |
