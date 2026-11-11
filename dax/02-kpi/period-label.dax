@@ -16,7 +16,7 @@ VAR _fy =
 VAR _fq =
     CALCULATE(MAX('Date'[fiscal_quarter]), REMOVEFILTERS('Date'), 'Date'[date] = _end)
 VAR _is_fy_end =
-    CALCULATE(MAX('Date'[is_fiscal_year_end]), REMOVEFILTERS('Date'), 'Date'[date] = _end)
+    CALCULATE(MAXX(VALUES('Date'[is_fiscal_year_end]), IF('Date'[is_fiscal_year_end], 1, 0)), REMOVEFILTERS('Date'), 'Date'[date] = _end) = 1
 RETURN
 IF(
     ISBLANK(_end),

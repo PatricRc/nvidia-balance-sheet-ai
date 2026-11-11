@@ -14,13 +14,13 @@ VAR _end =
     )
 VAR _inc_ytd =
     CALCULATE(
-        MAX('Income Statement'[is_ytd]),
+        MAXX(VALUES('Income Statement'[is_ytd]), IF('Income Statement'[is_ytd], 1, 0)),
         'Income Statement'[is_latest_filing] = TRUE(),
         'Income Statement'[period_end] = _end
     )
 RETURN
 IF(
-    _cf_ytd && NOT COALESCE(_inc_ytd, FALSE()),
+    _cf_ytd = 1 && COALESCE(_inc_ytd, 0) = 0,
     BLANK(),
     DIVIDE([Operating Cash Flow], [Net Income])
 )
