@@ -3,7 +3,24 @@
 // Display folder: 03-ratios
 // Format: 0.00
 // Hidden: false
-// Operating Cash Flow / Net Income (cash conversion). Meaningful when both are annual or the same window; if [Cash Flow Is YTD] and income is a standalone quarter, the ratio mixes YTD cash with quarterly earnings — treat as blank for analysis in that case is left to the report (the measure still computes).
+// Operating Cash Flow / Net Income (cash conversion) on matching windows only. BLANK when cash flow is 10-Q YTD but Net Income is a standalone quarter (Q2/Q3), so YTD cash is never divided by one quarter of earnings.
 
 CFO to Net Income =
-DIVIDE([Operating Cash Flow], [Net Income])
+VAR _cf_ytd = [Cash Flow Is YTD]
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _inc_ytd =
+    CALCULATE(
+        MAX('Income Statement'[is_ytd]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+RETURN
+IF(
+    _cf_ytd && NOT COALESCE(_inc_ytd, FALSE()),
+    BLANK(),
+    DIVIDE([Operating Cash Flow], [Net Income])
+)

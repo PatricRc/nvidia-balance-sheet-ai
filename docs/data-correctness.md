@@ -8,7 +8,8 @@ Rules enforced by `nb_bronze_silver_gold_sec_edgar.ipynb`. Expand with more work
 2. **Instant vs duration** — balance-sheet concepts are *instant* (`start` is null). Income / cash-flow concepts are *duration*. Gold filters by the curated `expected_period_type`.
 3. **Primary period vs comparatives** — a single 10-K often restates prior years under the same `fy`/`fp`. Mark `is_period_primary` when `period_end == filings.reportDate` for that `accn`. Charts / “latest” KPIs use `is_latest_filing` (latest filed among primary rows per concept+fy+fp).
 4. **10-Q YTD** — duration facts on 10-Q with `duration_days > 100` are flagged `is_ytd=true`. Raw YTD is kept. Do **not** invent standalone quarters unless an exact derivation is coded (e.g. Q4 = FY − 9M YTD when both exist) and stored with lineage — that derivation is **not** in v1 of this notebook.
-5. **Restatements** — silver keeps every observation. Gold collapses duplicates on `(concept, start, end, fy, fp, form_base, unit)` keeping the latest `filed` and retaining `accn` for citations.
+5. **Restatements** — silver keeps every observation. Gold collapses duplicates on `(concept, start, end, fy, fp, form_base, unit)` keeping the latest `filed` and retaining `accn` for citations. Because `fy`/`fp` are the *filing's* fiscal period and primary rows require `end == reportDate` of that filing, gold shows values **as originally reported**; comparatives restated in later filings are kept in silver only.
+   - **One latest row per period** — a Q2/Q3 10-Q carries both the 3-month and the 6/9-month YTD duration row with the same end, accession and filed date. `is_latest_filing` prefers the standalone 3-month row (also on the older-filing fallback path); YTD is latest only when it is the sole window (10-Q cash flows). The notebook asserts zero YTD income rows among Q1–Q3 latest rows and exactly one latest row per concept × fy × fp.
 6. **companyfacts ≠ the full filing** — structured XBRL extract only; footnotes and MD&A are out of scope for these tables.
 7. **Identity check** — for every latest primary period that has both concepts: `Assets == LiabilitiesAndStockholdersEquity` within $1. Notebook prints pass/fail counts.
 8. **Units** — statement money lines use `USD`; EPS uses `USD/shares`. Other units are excluded from gold statement tables.
@@ -33,6 +34,7 @@ Source accession `0001045810-26-000021`, filed `2026-02-25`, period end `2026-01
 
 ## Known gaps
 
+- `MarketableSecuritiesCurrent` last appears at Q3 FY2026 (2025-10-26); the FY2026 10-K and later 10-Qs no longer tag current marketable securities in us-gaap, so Quick Ratio and Net Cash are BLANK from FY2026 (Net Cash (Cash Only) is the fallback).
 - `PaymentsOfDividendsCommonStock` is absent from NVIDIA companyfacts; gold uses `PaymentsOfDividends`.
 - `PaymentsToAcquirePropertyPlantAndEquipment` (CapEx) last appears in NVIDIA companyfacts around mid-FY2020; later periods (including FY2026) have no CapEx row, so Free Cash Flow is BLANK.
 - Recent annual revenue is tagged `Revenues`; older years may also have `RevenueFromContractWithCustomerExcludingAssessedTax` — both stay on `gold.dim_line_item`.

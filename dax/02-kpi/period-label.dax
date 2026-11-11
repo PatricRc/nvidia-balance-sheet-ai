@@ -1,0 +1,25 @@
+// Period Label
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: 
+// Hidden: false
+// Text label for the latest balance-sheet period in context, e.g. "Q2 FY2027 · ended 2026-07-26" or "FY2026 · ended 2026-01-25". Fiscal labels only — never calendar.
+
+Period Label =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), REMOVEFILTERS('Date'), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), REMOVEFILTERS('Date'), 'Date'[date] = _end)
+VAR _is_fy_end =
+    CALCULATE(MAX('Date'[is_fiscal_year_end]), REMOVEFILTERS('Date'), 'Date'[date] = _end)
+RETURN
+IF(
+    ISBLANK(_end),
+    BLANK(),
+    IF(_is_fy_end, "FY" & _fy, "Q" & _fq & " FY" & _fy) & " · ended " & FORMAT(_end, "yyyy-mm-dd")
+)

@@ -3,7 +3,7 @@
 // Display folder: 04-analysis
 // Format: #,##0
 // Hidden: false
-// Equity minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR.
+// Equity minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR. BLANK when the current or prior value is missing.
 
 Equity YoY Change =
 VAR _end =
@@ -31,4 +31,4 @@ VAR _prior =
         'Date'[date] = _prior_end
     )
 RETURN
-_curr - _prior
+IF(ISBLANK(_curr) || ISBLANK(_prior), BLANK(), _curr - _prior)

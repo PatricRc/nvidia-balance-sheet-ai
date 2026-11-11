@@ -1,0 +1,20 @@
+// Long-Term Debt Current
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Point-in-time LongTermDebtCurrent (current portion of long-term debt) at the latest period_end (is_latest_filing). Tagged by NVIDIA from FY2020; earlier periods are BLANK.
+
+Long-Term Debt Current =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] = "LongTermDebtCurrent",
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)

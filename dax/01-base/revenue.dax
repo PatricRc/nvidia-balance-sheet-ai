@@ -3,7 +3,7 @@
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
-// Duration revenue for the single latest period_end in context (is_latest_filing). Prefers RevenueFromContractWithCustomerExcludingAssessedTax when present, else Revenues. Not a sum of quarters. 10-Q values may be YTD when [Cash Flow Is YTD] / income is_ytd is true; FY 10-K is the annual total.
+// Duration revenue for the single latest period_end in context (is_latest_filing). Prefers RevenueFromContractWithCustomerExcludingAssessedTax when present, else Revenues. Not a sum of quarters. On a 10-Q this is the standalone fiscal quarter (gold prefers the 3-month row over YTD); on the FY 10-K it is the annual total.
 
 Revenue =
 VAR _end =

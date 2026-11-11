@@ -1,0 +1,12 @@
+// Net Cash
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Cash & equivalents + current Marketable Securities − Gross Debt (leases excluded). BLANK when Marketable Securities is not tagged (FY2026 onward) so the figure is never understated; use [Net Cash (Cash Only)] as the conservative fallback.
+
+Net Cash =
+VAR _ms = [Marketable Securities]
+VAR _debt = [Gross Debt]
+RETURN
+IF(ISBLANK(_ms) || ISBLANK([Cash]), BLANK(), [Cash] + _ms - COALESCE(_debt, 0))

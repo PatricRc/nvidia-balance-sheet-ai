@@ -3,7 +3,7 @@
 // Display folder: 01-base
 // Format: #,##0
 // Hidden: false
-// Duration NetIncomeLoss for the single latest period_end in context; is_latest_filing only. Not a sum of quarters.
+// Duration NetIncomeLoss for the single latest period_end in context; is_latest_filing only. Not a sum of quarters. Standalone fiscal quarter on a 10-Q; annual total on the FY 10-K.
 
 Net Income =
 VAR _end =

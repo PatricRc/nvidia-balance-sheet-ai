@@ -3,7 +3,13 @@
 // Display folder: 03-ratios
 // Format: 0.00
 // Hidden: false
-//  (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. A missing Marketable Securities amount is treated as 0 (DAX BLANK in addition).
+// (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. BLANK when Marketable Securities is not tagged (FY2026 onward) — treating it as 0 would understate NVIDIA's liquidity by tens of billions.
 
 Quick Ratio =
-DIVIDE([Cash] + [Marketable Securities] + [Accounts Receivable], [Current Liabilities])
+VAR _ms = [Marketable Securities]
+RETURN
+IF(
+    ISBLANK(_ms),
+    BLANK(),
+    DIVIDE([Cash] + _ms + [Accounts Receivable], [Current Liabilities])
+)

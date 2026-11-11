@@ -1,0 +1,12 @@
+// Gross Debt
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Long-Term Debt (noncurrent) + Long-Term Debt Current. Excludes operating lease liabilities (see [Operating Lease Liabilities]). BLANK current portion counts as 0; BLANK when noncurrent debt is BLANK.
+
+Gross Debt =
+VAR _lt = [Long-Term Debt]
+VAR _cur = [Long-Term Debt Current]
+RETURN
+IF(ISBLANK(_lt), BLANK(), _lt + COALESCE(_cur, 0))

@@ -1,0 +1,11 @@
+// Net Cash (Cash Only)
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// Conservative net cash: Cash & equivalents − Gross Debt (marketable securities and leases excluded). Always available; label it as cash-only on the canvas.
+
+Net Cash (Cash Only) =
+VAR _cash = [Cash]
+RETURN
+IF(ISBLANK(_cash), BLANK(), _cash - COALESCE([Gross Debt], 0))

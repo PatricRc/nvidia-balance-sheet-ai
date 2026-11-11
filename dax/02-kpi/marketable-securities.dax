@@ -3,7 +3,7 @@
 // Display folder: 02-kpi
 // Format: #,##0
 // Hidden: false
-// Point-in-time MarketableSecuritiesCurrent at the latest period_end. May be blank in some years (e.g. FY2026 companyfacts).
+// Point-in-time MarketableSecuritiesCurrent at the latest period_end. NVIDIA stopped tagging this concept from the FY2026 10-K (last value Q3 FY2026, 2025-10-26), so it is BLANK from FY2026 on — companyfacts has no replacement us-gaap concept.
 
 Marketable Securities =
 VAR _end =

@@ -22,15 +22,36 @@ Ratios are **not annualized** in a quarterly context (quarterly net income over 
 
 ## TTM and Q4
 
-`[TTM Revenue]` and `[TTM Net Income]` sum four **standalone** fiscal quarters. Q4 is not filed as a 10-Q; it is derived as **FY − Q1 − Q2 − Q3** only when those three quarters exist, are `is_latest_filing`, and are **not** `is_ytd`. If the current period is the annual 10-K (`fiscal_period = FY` or duration > 300 days), TTM equals the annual measure.
+Gold guarantees **one `is_latest_filing` row per concept × fiscal year × fiscal period**, and on Q1–Q3 income rows it is the **standalone 3-month** row (a 10-Q also carries the 6/9-month YTD row; the notebook asserts YTD never wins). So `[Revenue]` / `[Net Income]` on a 10-Q are standalone quarters.
 
-P&L **QoQ** measures are **BLANK** when the latest period is annual, so a 10-K total is not compared to Q3. Balance-sheet QoQ at year-end is Q4 vs Q3 (point-in-time) and is kept.
+`[Revenue Standalone Quarter]` / `[Net Income Standalone Quarter]` (hidden) return one standalone quarter for any fiscal quarter-end: Q1–Q3 = the base measure; at the FY end Q4 is derived as **FY − Q1 − Q2 − Q3** (BLANK unless all three quarters exist).
 
-Cash-flow 10-Q figures with `duration_days > 100` are YTD (`[Cash Flow Is YTD]`). `[CFO to Net Income]` can mix YTD cash with a standalone quarter of earnings in that case — prefer annual or aligned windows.
+`[TTM Revenue]` / `[TTM Net Income]` sum the four standalone quarters ending at the latest period (via the helpers) and are **BLANK unless all four exist** — a missing quarter is never counted as 0. If the current period is the annual 10-K (`fiscal_period = FY` or duration > 300 days), TTM equals the annual measure.
+
+P&L **QoQ** measures compare standalone quarters, so **Q1 is compared with the derived Q4** (not with the 12-month 10-K total). They are **BLANK** when the latest period is annual, or the prior quarter is missing. Balance-sheet QoQ at year-end is Q4 vs Q3 (point-in-time) and is kept.
+
+All `* Change` measures (YoY and QoQ) return **BLANK when the current or prior value is missing** — never the full current value as a fake "change".
+
+`[Revenue CAGR 3Y]` / `[5Y]` use the latest **completed** fiscal year on or before the latest period in context (an in-progress year falls back to the prior FY) and are BLANK when either endpoint is missing (previously −100%).
+
+Cash-flow 10-Q figures with `duration_days > 100` are YTD (`[Cash Flow Is YTD]`). `[CFO to Net Income]` is **BLANK** when cash flow is YTD but Net Income is a standalone quarter (Q2/Q3), so windows always match.
+
+## Debt, leases and net cash (page 3)
+
+| Measure | Definition |
+|---|---|
+| `[Long-Term Debt Current]` | `LongTermDebtCurrent` (tagged from FY2020) |
+| `[Gross Debt]` | `[Long-Term Debt]` + `[Long-Term Debt Current]` (blank current portion = 0). Leases excluded. |
+| `[Operating Lease Liabilities]` | `OperatingLeaseLiabilityCurrent` + `OperatingLeaseLiabilityNoncurrent`, shown separately |
+| `[Net Cash]` | `[Cash]` + `[Marketable Securities]` − `[Gross Debt]`; **BLANK when Marketable Securities is not tagged** (FY2026 onward) |
+| `[Net Cash (Cash Only)]` | `[Cash]` − `[Gross Debt]` — conservative, always available; label it "cash only" |
+| `[Period Label]` | Text such as `Q2 FY2027 · ended 2026-07-26` for card subtitles |
+
+FY2026 check: Gross Debt = 7,469 + 999 = **$8,468M** (= us-gaap `LongTermDebt`); Net Cash (Cash Only) = 10,605 − 8,468 = **$2,137M**.
 
 ## Concepts used
 
-Only curated `gold.dim_line_item` concepts (29 rows). Revenue prefers `RevenueFromContractWithCustomerExcludingAssessedTax` then `Revenues` (already in `[Revenue]`). Cost of Revenue prefers `CostOfRevenue` then `CostOfGoodsAndServicesSold`. Dividends use `PaymentsOfDividends`. Quick Ratio treats a blank `MarketableSecuritiesCurrent` as 0 (missing in some years, including FY2026 companyfacts).
+Only curated `gold.dim_line_item` concepts (29 rows). Revenue prefers `RevenueFromContractWithCustomerExcludingAssessedTax` then `Revenues` (already in `[Revenue]`). Cost of Revenue prefers `CostOfRevenue` then `CostOfGoodsAndServicesSold`. Dividends use `PaymentsOfDividends`. `MarketableSecuritiesCurrent` stops at Q3 FY2026 (2025-10-26): NVIDIA no longer tags it from the FY2026 10-K and companyfacts has no us-gaap replacement (`AvailableForSaleSecuritiesDebtSecurities` also includes cash equivalents). `[Quick Ratio]` and `[Net Cash]` therefore return **BLANK** for those periods instead of treating it as 0, which would understate liquidity by tens of billions.
 
 ## Skipped (no invented concepts)
 

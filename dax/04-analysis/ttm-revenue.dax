@@ -3,7 +3,7 @@
 // Display folder: 04-analysis
 // Format: #,##0
 // Hidden: false
-// Trailing four standalone fiscal quarters of Revenue. Q4 is derived as FY − Q1 − Q2 − Q3 only when those three quarters are present, is_latest_filing, and not is_ytd. If the current period is the annual 10-K (FY or duration > 300 days), this equals [Revenue].
+// Trailing four standalone fiscal quarters of Revenue ending at the latest period in context ([Revenue Standalone Quarter], so Q4 = FY − Q1 − Q2 − Q3). BLANK unless all four quarters exist. If the current period is the annual 10-K (FY or duration > 300 days), this equals [Revenue].
 
 TTM Revenue =
 VAR _end =
@@ -11,10 +11,6 @@ VAR _end =
         MAX('Income Statement'[period_end]),
         'Income Statement'[is_latest_filing] = TRUE()
     )
-VAR _fy =
-    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
-VAR _fq =
-    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
 VAR _fp =
     CALCULATE(
         MAX('Income Statement'[fiscal_period]),
@@ -28,81 +24,28 @@ VAR _days =
         'Income Statement'[period_end] = _end
     )
 VAR _annual = _fp = "FY" || _days > 300
-VAR _q0_fy = _fy
-VAR _q0_fq = _fq
-VAR _q1_fy = IF(_q0_fq = 1, _q0_fy - 1, _q0_fy)
-VAR _q1_fq = IF(_q0_fq = 1, 4, _q0_fq - 1)
-VAR _q2_fy = IF(_q1_fq = 1, _q1_fy - 1, _q1_fy)
-VAR _q2_fq = IF(_q1_fq = 1, 4, _q1_fq - 1)
-VAR _q3_fy = IF(_q2_fq = 1, _q2_fy - 1, _q2_fy)
-VAR _q3_fq = IF(_q2_fq = 1, 4, _q2_fq - 1)
-VAR _pairs =
-    UNION(
-        ROW("fy", _q0_fy, "fq", _q0_fq),
-        ROW("fy", _q1_fy, "fq", _q1_fq),
-        ROW("fy", _q2_fy, "fq", _q2_fq),
-        ROW("fy", _q3_fy, "fq", _q3_fq)
+VAR _q_ends =
+    TOPN(
+        4,
+        CALCULATETABLE(
+            VALUES('Date'[date]),
+            REMOVEFILTERS('Date'),
+            'Date'[is_fiscal_quarter_end] = TRUE(),
+            'Date'[date] <= _end
+        ),
+        'Date'[date], DESC
     )
-VAR _ttm =
-    SUMX(
-        _pairs,
-        VAR _y = [fy]
-        VAR _q = [fq]
-        VAR _qtr =
-            IF(
-                _q < 4,
-                CALCULATE(
-                    [Revenue],
-                    REMOVEFILTERS('Date'),
-                    'Income Statement'[fiscal_year] = _y,
-                    'Income Statement'[fiscal_period] = "Q" & _q,
-                    'Income Statement'[is_latest_filing] = TRUE(),
-                    'Income Statement'[is_ytd] = FALSE()
-                ),
-                VAR _ann =
-                    CALCULATE(
-                        [Revenue],
-                        REMOVEFILTERS('Date'),
-                        'Income Statement'[fiscal_year] = _y,
-                        'Income Statement'[fiscal_period] = "FY",
-                        'Income Statement'[is_latest_filing] = TRUE()
-                    )
-                VAR _qa =
-                    CALCULATE(
-                        [Revenue],
-                        REMOVEFILTERS('Date'),
-                        'Income Statement'[fiscal_year] = _y,
-                        'Income Statement'[fiscal_period] = "Q1",
-                        'Income Statement'[is_latest_filing] = TRUE(),
-                        'Income Statement'[is_ytd] = FALSE()
-                    )
-                VAR _qb =
-                    CALCULATE(
-                        [Revenue],
-                        REMOVEFILTERS('Date'),
-                        'Income Statement'[fiscal_year] = _y,
-                        'Income Statement'[fiscal_period] = "Q2",
-                        'Income Statement'[is_latest_filing] = TRUE(),
-                        'Income Statement'[is_ytd] = FALSE()
-                    )
-                VAR _qc =
-                    CALCULATE(
-                        [Revenue],
-                        REMOVEFILTERS('Date'),
-                        'Income Statement'[fiscal_year] = _y,
-                        'Income Statement'[fiscal_period] = "Q3",
-                        'Income Statement'[is_latest_filing] = TRUE(),
-                        'Income Statement'[is_ytd] = FALSE()
-                    )
-                RETURN
-                IF(
-                    ISBLANK(_ann) || ISBLANK(_qa) || ISBLANK(_qb) || ISBLANK(_qc),
-                    BLANK(),
-                    _ann - _qa - _qb - _qc
-                )
-            )
-        RETURN
-        _qtr
+VAR _quarters =
+    ADDCOLUMNS(
+        _q_ends,
+        "@v",
+            VAR _d = 'Date'[date]
+            RETURN CALCULATE([Revenue Standalone Quarter], REMOVEFILTERS('Date'), 'Date'[date] = _d)
     )
+VAR _n = COUNTROWS(FILTER(_quarters, NOT ISBLANK([@v])))
 RETURN
-IF(_annual, [Revenue], _ttm)
+IF(
+    ISBLANK(_end),
+    BLANK(),
+    IF(_annual, [Revenue], IF(_n = 4, SUMX(_quarters, [@v])))
+)

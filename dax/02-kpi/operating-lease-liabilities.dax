@@ -1,0 +1,20 @@
+// Operating Lease Liabilities
+// Table: Balance Sheet
+// Display folder: 02-kpi
+// Format: #,##0
+// Hidden: false
+// OperatingLeaseLiabilityCurrent + OperatingLeaseLiabilityNoncurrent at the latest period_end (is_latest_filing). Shown separately from debt; never netted into Net Cash.
+
+Operating Lease Liabilities =
+VAR _end =
+    CALCULATE(
+        MAX('Balance Sheet'[period_end]),
+        'Balance Sheet'[is_latest_filing] = TRUE()
+    )
+RETURN
+CALCULATE(
+    SUM('Balance Sheet'[value_usd]),
+    'Balance Sheet'[concept] IN { "OperatingLeaseLiabilityCurrent", "OperatingLeaseLiabilityNoncurrent" },
+    'Balance Sheet'[is_latest_filing] = TRUE(),
+    'Balance Sheet'[period_end] = _end
+)

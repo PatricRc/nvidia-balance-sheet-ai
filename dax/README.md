@@ -16,4 +16,6 @@ Applied in Fabric by:
 | `02-page1-snapshot/` … `12-alt-text/` | Later report-page / HTML / SVG measures (stubs) |
 | `_all-measures.dax` | Concatenated 01–04 scripts |
 
+Edit the per-measure `.dax` files only, then run `python scripts/build_measures.py` — it regenerates `_all-measures.dax` and the measure lists embedded in both notebooks (`--check` verifies they are in sync).
+
 See `docs/measures.md` for formulas, average-vs-ending rules, and skipped concepts.
