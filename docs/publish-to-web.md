@@ -1,6 +1,8 @@
 # Publish to web
 
-**Live report:** not published yet. Add the public link here once Patricio approves publishing.
+**Live report:** https://app.fabric.microsoft.com/view?r=eyJrIjoiZWY4MTMwNGMtODQzYS00MjIxLWI5NzItODlkNjAyNjlhYjIyIiwidCI6ImQxZmYwZmFmLTA5ZWItNDJjZi04MzEzLTA3MzNiM2Y3MDdkNyIsImMiOjR9
+
+The report is published. The link is public by design (Publish to web) and anyone with it can see the Import model's data.
 
 Publish to web won't publish a report on a Direct Lake model: Direct Lake reads OneLake as the viewer. The public version therefore runs on an Import-mode copy, the same recipe as `trading-analytics-fabric`:
 
