@@ -1,6 +1,6 @@
 // DIO
-// Table: Balance Sheet
-// Display folder: 03-ratios
+// Table: _Measures
+// Display folder: Category\03 Ratios\Efficiency;Pages\02 Liquidity
 // Format: #,##0.0
 // Hidden: false
 // Days inventory outstanding: Period Days × Average Inventory / Cost of Revenue. Period Days is the filing duration (not a fixed 365).

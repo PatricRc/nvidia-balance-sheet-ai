@@ -1,6 +1,6 @@
 // Total Assets YoY %
-// Table: Balance Sheet
-// Display folder: 04-analysis
+// Table: _Measures
+// Display folder: Category\04 Analysis\Growth;Pages\01 Financial Position
 // Format: 0.0%
 // Hidden: false
 // YoY change in Total Assets as a % of the prior fiscal-year same quarter. Uses fiscal calendar, not SAMEPERIODLASTYEAR.

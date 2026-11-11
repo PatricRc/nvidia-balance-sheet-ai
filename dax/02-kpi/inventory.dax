@@ -1,6 +1,6 @@
 // Inventory
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Balance Sheet;Pages\02 Liquidity;Pages\04 Notes & Evidence;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Point-in-time InventoryNet at the latest period_end (is_latest_filing).

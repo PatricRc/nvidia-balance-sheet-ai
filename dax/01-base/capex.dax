@@ -1,6 +1,6 @@
 // CapEx
-// Table: Balance Sheet
-// Display folder: 01-base
+// Table: _Measures
+// Display folder: Category\01 Base\Cash Flow;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: true
 // Hidden helper: PaymentsToAcquirePropertyPlantAndEquipment at the latest period_end. NVIDIA companyfacts last carries this concept through mid-FY2020; later periods are blank.

@@ -1,6 +1,6 @@
 # dax/
 
-DAX measures for the Direct Lake semantic model **NVIDIA Financials** — one `.dax` file each with a commented header. Hosted on **Balance Sheet**.
+DAX measures for the Direct Lake semantic model **NVIDIA Financials** — one `.dax` file each with a commented header. Hosted on the calculated **`_Measures`** table (see `docs/measures.md`).
 
 Applied in Fabric by:
 
@@ -15,5 +15,7 @@ Applied in Fabric by:
 | `04-analysis/` | QoQ/YoY, TTM, CAGR, common-size %, DuPont |
 | `02-page1-snapshot/` … `12-alt-text/` | Later report-page / HTML / SVG measures (stubs) |
 | `_all-measures.dax` | Concatenated 01–04 scripts |
+
+Edit the per-measure `.dax` files and `dax/measure-folders.csv` (subject and report pages), then run `python scripts/build_measures.py` — it regenerates headers, `_all-measures.dax`, and the measure lists embedded in both notebooks (`--check` verifies they are in sync).
 
 See `docs/measures.md` for formulas, average-vs-ending rules, and skipped concepts.

@@ -1,6 +1,6 @@
 // Common Size %
-// Table: Balance Sheet
-// Display folder: 04-analysis
+// Table: _Measures
+// Display folder: Category\04 Analysis\Common Size;Pages\01 Financial Position;Pages\05 Financial Statements
 // Format: 0.0%
 // Hidden: false
 // Selected Line Item amount at the latest period_end (is_latest_filing) as a % of Revenue (income statement and cash flow) or Total Assets (balance sheet). Requires a single selected line item.

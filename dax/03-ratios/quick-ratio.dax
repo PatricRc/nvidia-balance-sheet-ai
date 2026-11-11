@@ -1,9 +1,15 @@
 // Quick Ratio
-// Table: Balance Sheet
-// Display folder: 03-ratios
+// Table: _Measures
+// Display folder: Category\03 Ratios\Liquidity;Pages\02 Liquidity;Pages\05 Financial Statements
 // Format: 0.00
 // Hidden: false
-//  (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. A missing Marketable Securities amount is treated as 0 (DAX BLANK in addition).
+// (Cash + Marketable Securities + Accounts Receivable) / Current Liabilities. Follows [Marketable Securities]. BLANK when that measure is BLANK so a missing securities tag is never treated as 0.
 
 Quick Ratio =
-DIVIDE([Cash] + [Marketable Securities] + [Accounts Receivable], [Current Liabilities])
+VAR _ms = [Marketable Securities]
+RETURN
+IF(
+    ISBLANK(_ms),
+    BLANK(),
+    DIVIDE([Cash] + _ms + [Accounts Receivable], [Current Liabilities])
+)

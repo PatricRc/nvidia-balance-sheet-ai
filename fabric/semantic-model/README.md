@@ -28,8 +28,9 @@ Friendly model names; source columns keep gold snake_case so DAX stays aligned w
 | `Date` | `gold.dim_date` | Contiguous calendar + NVIDIA fiscal calendar. Marked as the date table on `date`. |
 | `Line Item` | `gold.dim_line_item` | Curated us-gaap concept map (unique `concept`) |
 | `Filing` | `gold.dim_filing` | One row per accession (`accn`) |
+| `_Measures` | calculated `ROW("Dummy", BLANK())` | Measures home (Import). No relationships. The `Dummy` column is hidden. |
 
-Storage mode: Direct Lake on OneLake (`use_sql_endpoint=False`). All tables are Direct Lake; measures live on `Balance Sheet` (display folder `01-base`). No calculated tables.
+Storage mode: Direct Lake on OneLake (`use_sql_endpoint=False`). The six gold tables are Direct Lake. All 84 measures live on the calculated **`_Measures`** table (`ROW("Dummy", BLANK())`, Import, placeholder column hidden). That calculated table does not reference Direct Lake columns, which is supported in every Direct Lake mode; a lakehouse stub is not used. Display folders are `Category\\<group>\\<subject>` plus `Pages\\<page>` where mapped. See `docs/measures.md`.
 
 ## Relationships
 
@@ -64,7 +65,7 @@ Join types: `Date[date]` and fact `period_end` are Delta **Date** columns (cast 
 
 ## Measures (01-base)
 
-Hosted on **Balance Sheet** (display folder `01-base`). Point-in-time and duration measures all use the **single latest `period_end` in the current filter context** with `is_latest_filing = TRUE`. They never `SUM` across fiscal quarters (a fiscal-year date slicer includes Q1–Q3 and FY ends; summing would double-count).
+Hosted on **`_Measures`** (display folders under `Category\\01 Base\\…` and the Pages folders in `dax/measure-folders.csv`). Point-in-time and duration measures all use the **single latest `period_end` in the current filter context** with `is_latest_filing = TRUE`. They never `SUM` across fiscal quarters (a fiscal-year date slicer includes Q1–Q3 and FY ends; summing would double-count).
 
 | Measure | Concept(s) | Notes |
 |---|---|---|

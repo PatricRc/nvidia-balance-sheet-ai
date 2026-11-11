@@ -1,6 +1,6 @@
 // Net Income Margin %
-// Table: Balance Sheet
-// Display folder: 01-base
+// Table: _Measures
+// Display folder: Category\01 Base\Profitability;Pages\05 Financial Statements
 // Format: 0.0%
 // Hidden: false
 // [Net Income] / [Revenue] for the same latest period_end in context.

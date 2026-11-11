@@ -1,9 +1,9 @@
 // Net Income YoY Change
-// Table: Balance Sheet
-// Display folder: 04-analysis
+// Table: _Measures
+// Display folder: Category\04 Analysis\Growth;Pages\00 Cover;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
-// Net Income minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR.
+// Net Income minus the same NVIDIA fiscal quarter in the prior fiscal year (Date[fiscal_year]/[fiscal_quarter] quarter-end). Not SAMEPERIODLASTYEAR. BLANK when the current or prior value is missing.
 
 Net Income YoY Change =
 VAR _end =
@@ -31,4 +31,4 @@ VAR _prior =
         'Date'[date] = _prior_end
     )
 RETURN
-_curr - _prior
+IF(ISBLANK(_curr) || ISBLANK(_prior), BLANK(), _curr - _prior)

@@ -1,6 +1,6 @@
 // Free Cash Flow
-// Table: Balance Sheet
-// Display folder: 01-base
+// Table: _Measures
+// Display folder: Category\01 Base\Cash Flow;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Operating Cash Flow minus CapEx (PaymentsToAcquirePropertyPlantAndEquipment). Returns BLANK when CapEx is missing (NVIDIA companyfacts drops this concept after mid-FY2020).

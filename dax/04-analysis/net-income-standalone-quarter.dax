@@ -1,0 +1,61 @@
+// Net Income Standalone Quarter
+// Table: _Measures
+// Display folder: Category\04 Analysis\Helpers
+// Format: #,##0
+// Hidden: true
+// Hidden helper: Net Income for one standalone fiscal quarter. On Q1–Q3 it is [Net Income]; on the FY 10-K it derives Q4 = FY − Q1 − Q2 − Q3 (BLANK unless all three quarters exist). Used by QoQ and TTM so a quarter is never compared to a full year.
+
+Net Income Standalone Quarter =
+VAR _end =
+    CALCULATE(
+        MAX('Income Statement'[period_end]),
+        'Income Statement'[is_latest_filing] = TRUE()
+    )
+VAR _fy =
+    CALCULATE(MAX('Date'[fiscal_year]), 'Date'[date] = _end)
+VAR _fq =
+    CALCULATE(MAX('Date'[fiscal_quarter]), 'Date'[date] = _end)
+VAR _fp =
+    CALCULATE(
+        MAX('Income Statement'[fiscal_period]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _days =
+    CALCULATE(
+        MAX('Income Statement'[duration_days]),
+        'Income Statement'[is_latest_filing] = TRUE(),
+        'Income Statement'[period_end] = _end
+    )
+VAR _annual = _fp = "FY" || _days > 300
+VAR _fy_end =
+    CALCULATE(
+        MAX('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy,
+        'Date'[is_fiscal_year_end] = TRUE()
+    )
+VAR _q_ends =
+    CALCULATETABLE(
+        VALUES('Date'[date]),
+        REMOVEFILTERS('Date'),
+        'Date'[fiscal_year] = _fy,
+        'Date'[fiscal_quarter] IN { 1, 2, 3 },
+        'Date'[is_fiscal_quarter_end] = TRUE()
+    )
+VAR _q123 =
+    ADDCOLUMNS(
+        _q_ends,
+        "@v",
+            VAR _d = 'Date'[date]
+            RETURN CALCULATE([Net Income], REMOVEFILTERS('Date'), 'Date'[date] = _d)
+    )
+VAR _n = COUNTROWS(FILTER(_q123, NOT ISBLANK([@v])))
+VAR _annual_value =
+    CALCULATE([Net Income], REMOVEFILTERS('Date'), 'Date'[date] = _fy_end)
+RETURN
+IF(
+    _annual,
+    IF(_n = 3 && NOT ISBLANK(_annual_value), _annual_value - SUMX(_q123, [@v])),
+    [Net Income]
+)

@@ -1,6 +1,6 @@
 // Revenue YoY %
-// Table: Balance Sheet
-// Display folder: 01-base
+// Table: _Measures
+// Display folder: Category\01 Base\Growth;Pages\00 Cover;Pages\05 Financial Statements
 // Format: 0.0%
 // Hidden: false
 // Revenue versus the same NVIDIA fiscal quarter in the prior fiscal year (matched on Date[fiscal_year]/[fiscal_quarter] quarter-end), not SAMEPERIODLASTYEAR.

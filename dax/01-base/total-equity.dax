@@ -1,6 +1,6 @@
 // Total Equity
-// Table: Balance Sheet
-// Display folder: 01-base
+// Table: _Measures
+// Display folder: Category\01 Base\Balance Sheet;Pages\00 Cover;Pages\01 Financial Position;Pages\04 Notes & Evidence;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Point-in-time us-gaap StockholdersEquity; latest period_end; is_latest_filing only.

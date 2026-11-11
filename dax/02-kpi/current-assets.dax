@@ -1,6 +1,6 @@
 // Current Assets
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Balance Sheet;Pages\01 Financial Position;Pages\04 Notes & Evidence;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Point-in-time AssetsCurrent at the latest period_end (is_latest_filing).

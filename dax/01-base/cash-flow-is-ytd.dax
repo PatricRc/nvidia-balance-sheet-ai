@@ -1,6 +1,6 @@
 // Cash Flow Is YTD
-// Table: Balance Sheet
-// Display folder: 01-base
+// Table: _Measures
+// Display folder: Category\01 Base\Period;Pages\05 Financial Statements
 // Format: 0
 // Hidden: false
 // 1 when the cash-flow row at the latest period_end in context is flagged is_ytd (10-Q with duration_days > 100). Operating Cash Flow and Free Cash Flow are raw YTD in that case.
@@ -13,7 +13,7 @@ VAR _end =
     )
 RETURN
 CALCULATE(
-    MAX('Cash Flow'[is_ytd]),
+    MAXX(VALUES('Cash Flow'[is_ytd]), IF('Cash Flow'[is_ytd], 1, 0)),
     'Cash Flow'[is_latest_filing] = TRUE(),
     'Cash Flow'[period_end] = _end
 )

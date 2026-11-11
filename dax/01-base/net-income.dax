@@ -1,9 +1,9 @@
 // Net Income
-// Table: Balance Sheet
-// Display folder: 01-base
+// Table: _Measures
+// Display folder: Category\01 Base\Income Statement;Pages\00 Cover;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
-// Duration NetIncomeLoss for the single latest period_end in context; is_latest_filing only. Not a sum of quarters.
+// Duration NetIncomeLoss for the single latest period_end in context; is_latest_filing only. Not a sum of quarters. Standalone fiscal quarter on a 10-Q; annual total on the FY 10-K.
 
 Net Income =
 VAR _end =

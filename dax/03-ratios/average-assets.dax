@@ -1,6 +1,6 @@
 // Average Assets
-// Table: Balance Sheet
-// Display folder: 03-ratios
+// Table: _Measures
+// Display folder: Category\03 Ratios\Helpers
 // Format: #,##0
 // Hidden: false
 // Average of ending and prior-period-end (prior FY end at year grain, prior fiscal quarter end at quarter grain) Total Assets (prior quarter wraps Q1 → prior FY Q4). If the prior balance is missing, uses ending Total Assets.

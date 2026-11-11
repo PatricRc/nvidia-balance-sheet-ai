@@ -1,6 +1,6 @@
 // Debt to Equity
-// Table: Balance Sheet
-// Display folder: 01-base
+// Table: _Measures
+// Display folder: Category\01 Base\Leverage;Pages\03 Debt & Net Cash
 // Format: 0.00
 // Hidden: false
 // [Long-Term Debt] (LongTermDebtNoncurrent only) / [Total Equity]. Not total debt.

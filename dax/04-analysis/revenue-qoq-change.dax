@@ -1,9 +1,9 @@
 // Revenue QoQ Change
-// Table: Balance Sheet
-// Display folder: 04-analysis
+// Table: _Measures
+// Display folder: Category\04 Analysis\Growth
 // Format: #,##0
 // Hidden: false
-// Revenue minus the prior fiscal quarter (Q1 wraps to prior FY Q4). BLANK when the latest period is the annual 10-K (FY / duration > 300 days), so annual totals are not compared to a quarter.
+// Revenue minus the prior fiscal quarter (Q1 wraps to prior FY Q4, derived as FY − Q1 − Q2 − Q3 via [Revenue Standalone Quarter] so a quarter is never compared to a full year). BLANK when the latest period is the annual 10-K, or when the prior quarter is missing.
 
 Revenue QoQ Change =
 VAR _end =
@@ -41,9 +41,9 @@ VAR _prior_end =
     )
 VAR _prior =
     CALCULATE(
-        [Revenue],
+        [Revenue Standalone Quarter],
         REMOVEFILTERS('Date'),
         'Date'[date] = _prior_end
     )
 RETURN
-IF(_annual, BLANK(), _curr - _prior)
+IF(_annual || ISBLANK(_curr) || ISBLANK(_prior), BLANK(), _curr - _prior)

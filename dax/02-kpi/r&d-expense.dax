@@ -1,6 +1,6 @@
 // R&D Expense
-// Table: Balance Sheet
-// Display folder: 02-kpi
+// Table: _Measures
+// Display folder: Category\02 KPI\Income Statement;Pages\05 Financial Statements
 // Format: #,##0
 // Hidden: false
 // Duration ResearchAndDevelopmentExpense at the latest period_end (is_latest_filing).
